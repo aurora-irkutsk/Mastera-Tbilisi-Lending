@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initLanguageSwitcher();
     initModalForms();
     initScrollToTop();
+    initBotClickTracking();
 });
 
 // ============================================
@@ -508,10 +509,6 @@ function openClientForm() {
     const modal = document.getElementById('clientFormModal');
     if (modal) {
         modal.style.display = 'flex';
-        gtag('event', 'open_client_form', {
-            'event_category': 'forms',
-            'event_label': 'Client Form Opened'
-        });
     }
 }
 
@@ -526,10 +523,6 @@ function openMasterForm() {
     const modal = document.getElementById('masterFormModal');
     if (modal) {
         modal.style.display = 'flex';
-        gtag('event', 'open_master_form', {
-            'event_category': 'forms',
-            'event_label': 'Master Form Opened'
-        });
     }
 }
 
@@ -538,6 +531,36 @@ function closeMasterForm() {
     if (modal) {
         modal.style.display = 'none';
     }
+}
+
+// ============================================
+// ОТСЛЕЖИВАНИЕ КЛИКОВ ПО КНОПКАМ TELEGRAM-БОТА
+// ============================================
+
+function initBotClickTracking() {
+    document.querySelectorAll('.cta-button').forEach(button => {
+        button.addEventListener('click', function() {
+            let buttonType = 'other';
+            let buttonLabel = 'Другая кнопка';
+            
+            if (this.classList.contains('cta-clients')) {
+                buttonType = 'client';
+                buttonLabel = 'Найти мастера';
+            } else if (this.classList.contains('cta-masters')) {
+                buttonType = 'master';
+                buttonLabel = 'Получать заказы';
+            } else if (this.classList.contains('cta-footer')) {
+                buttonType = 'footer';
+                buttonLabel = 'Заказать мастера';
+            }
+            
+            gtag('event', 'telegram_bot_click', {
+                'event_category': 'engagement',
+                'event_label': buttonLabel,
+                'button_type': buttonType
+            });
+        });
+    });
 }
 
 // ============================================
