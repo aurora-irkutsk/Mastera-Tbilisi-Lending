@@ -793,6 +793,34 @@ header {
 }
 
 /* ============================================
+   STEPS BUTTON
+   ============================================ */
+.steps-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+}
+
+.steps-button .cta-button {
+    flex: 0 1 350px;
+}
+
+/* ============================================
+   TESTIMONIALS BUTTON
+   ============================================ */
+.testimonials-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+}
+
+.testimonials-button .cta-button {
+    flex: 0 1 350px;
+}
+
+/* ============================================
    ОТЗЫВЫ МАСТЕРОВ
    ============================================ */
 .testimonials {
@@ -1077,6 +1105,20 @@ header {
 .faq-answer strong {
     color: var(--safety-green);
     font-weight: 700;
+}
+
+/* ============================================
+   FAQ BUTTONS
+   ============================================ */
+.faq-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+}
+
+.faq-buttons .cta-button {
+    flex: 0 1 350px;
 }
 
 /* ============================================
