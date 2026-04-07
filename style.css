@@ -1782,6 +1782,16 @@ footer {
     text-align: center;
 }
 
+.modal-subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--safety-green);
+    text-align: center;
+    margin-bottom: 1.5rem;
+    margin-top: -1rem;
+}
+
 .contact-form {
     display: flex;
     flex-direction: column;
@@ -1817,6 +1827,17 @@ footer {
 .contact-form textarea:valid,
 .contact-form select:valid {
     border-color: rgba(6, 255, 165, 0.5);
+}
+
+.contact-or-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--construction-yellow);
+    text-align: center;
+    margin: 0.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .contact-form input:invalid:not(:placeholder-shown),
@@ -1873,6 +1894,24 @@ footer {
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.8);
     line-height: 1.4;
+}
+
+.consent-label {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 0.5rem;
+}
+
+.consent-label input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--construction-yellow);
 }
 
 .submit-btn {

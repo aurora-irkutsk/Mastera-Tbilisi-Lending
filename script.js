@@ -365,29 +365,30 @@ function initModalForms() {
             e.target.style.display = 'none';
         }
     });
-    
+
     // Закрытие по ESC
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeClientForm();
             closeMasterForm();
+            closeClientLeadForm();
         }
     });
-    
+
     // Автоформатирование телефонных номеров
     initPhoneFormatting();
-    
+
     // Управление кнопками submit через checkbox
     initConsentCheckboxes();
-    
+
     // Валидация форм перед отправкой
     const clientForm = document.getElementById('clientForm');
     const masterForm = document.getElementById('masterForm');
-    
+
     if (clientForm) {
         clientForm.addEventListener('submit', validateForm);
     }
-    
+
     if (masterForm) {
         masterForm.addEventListener('submit', validateForm);
     }
@@ -417,7 +418,7 @@ function initConsentCheckboxes() {
 
 // Форматирование телефонных номеров для Грузии
 function initPhoneFormatting() {
-    const phoneInputs = document.querySelectorAll('#clientPhone, #masterPhone');
+    const phoneInputs = document.querySelectorAll('#clientPhone, #masterPhone, #leadPhone');
     
     phoneInputs.forEach(input => {
         input.addEventListener('input', (e) => {
@@ -532,6 +533,140 @@ function closeMasterForm() {
         modal.style.display = 'none';
     }
 }
+
+// ============================================
+// МОДАЛЬНОЕ ОКНО ДЛЯ ЗАЯВКИ КЛИЕНТА (LEAD FORM)
+// ============================================
+
+function openClientLeadForm() {
+    const modal = document.getElementById('clientLeadFormModal');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+
+    // Трекинг события для аналитики
+    gtag('event', 'open_lead_form', {
+        'event_category': 'engagement',
+        'event_label': 'Открыта форма заявки'
+    });
+}
+
+function closeClientLeadForm() {
+    const modal = document.getElementById('clientLeadFormModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Трекинг отправки формы заявки
+function initLeadFormTracking() {
+    const leadForm = document.getElementById('clientLeadForm');
+    
+    if (leadForm) {
+        leadForm.addEventListener('submit', function(e) {
+            // Отправляем событие конверсии в аналитику
+            gtag('event', 'conversion', {
+                'send_to': 'AW-CONVERSION_ID/Mastera-Tbilisi',
+                'event_category': 'leads',
+                'event_label': 'SUBMIT_LEAD_FORM_1',
+                'value': 1.0,
+                'currency': 'GEL'
+            });
+
+            // Дополнительное событие для отслеживания
+            gtag('event', 'submit_lead_form', {
+                'event_category': 'conversion',
+                'event_label': 'Заявка отправлена',
+                'form_location': 'Как найти мастера'
+            });
+        });
+    }
+
+    // Управление кнопкой submit через checkbox
+    const leadConsent = document.getElementById('leadConsent');
+    const leadSubmitBtn = document.getElementById('leadSubmitBtn');
+
+    if (leadConsent && leadSubmitBtn) {
+        // Кнопка активна по умолчанию (чекбокс checked)
+        leadSubmitBtn.disabled = !leadConsent.checked;
+        
+        leadConsent.addEventListener('change', function() {
+            leadSubmitBtn.disabled = !this.checked;
+        });
+    }
+
+    // Валидация формы
+    leadForm.addEventListener('submit', validateLeadForm);
+}
+
+function validateLeadForm(e) {
+    const form = e.target;
+    const phoneInput = document.getElementById('leadPhone');
+    const telegramInput = form.querySelector('input[name="telegram"]');
+    const whatsappInput = form.querySelector('input[name="whatsapp"]');
+
+    // Проверка: хотя бы один из контактов должен быть заполнен
+    const telegramValue = telegramInput ? telegramInput.value.trim() : '';
+    const whatsappValue = whatsappInput ? whatsappInput.value.trim() : '';
+
+    if (!telegramValue && !whatsappValue) {
+        e.preventDefault();
+        const currentLang = document.documentElement.lang;
+        if (currentLang === 'ka') {
+            alert('გთხოვთ, შეავსოთ ერთ-ერთი საკონტაქტო ველი: Telegram ან WhatsApp');
+        } else {
+            alert('Пожалуйста, заполните хотя бы один из контактов: Telegram или WhatsApp');
+        }
+        if (telegramInput && !telegramValue) {
+            telegramInput.focus();
+        } else {
+            whatsappInput.focus();
+        }
+        return false;
+    }
+
+    // Проверка телефона
+    if (phoneInput) {
+        const phoneValue = phoneInput.value;
+        const phonePattern = /^\+995[0-9]{9}$/;
+
+        if (!phonePattern.test(phoneValue)) {
+            e.preventDefault();
+            alert('Пожалуйста, введите корректный грузинский номер телефона в формате: +995XXXXXXXXX (9 цифр после +995)');
+            phoneInput.focus();
+            return false;
+        }
+
+        // Проверка кода оператора
+        const operatorCode = phoneValue.substring(4, 6);
+        const validCodes = ['55', '56', '57', '58', '59', '51', '52', '53', '54', '68', '70', '71', '72', '74', '75', '77', '79', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99'];
+
+        if (!validCodes.includes(operatorCode)) {
+            e.preventDefault();
+            alert('Пожалуйста, введите корректный код оператора. Номер должен начинаться с +995 и далее 55, 56, 57, 58, 59, 51-54, 68, 70-79, 90-99');
+            phoneInput.focus();
+            return false;
+        }
+    }
+
+    // Проверка формата Telegram, если заполнен
+    if (telegramValue) {
+        const telegramPattern = /^(@[a-zA-Z0-9_]{5,32}|[0-9]{9,15})$/;
+        if (!telegramPattern.test(telegramValue)) {
+            e.preventDefault();
+            alert('Пожалуйста, введите корректный Telegram username (например: @username) или номер телефона');
+            telegramInput.focus();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// Инициализация при загрузке
+document.addEventListener('DOMContentLoaded', () => {
+    initLeadFormTracking();
+});
 
 // ============================================
 // ОТСЛЕЖИВАНИЕ КЛИКОВ ПО КНОПКАМ TELEGRAM-БОТА
