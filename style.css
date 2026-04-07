@@ -395,10 +395,12 @@ header {
 
 .section-card:nth-child(1) {
     animation-delay: 0.8s;
+    border-color: var(--safety-green);
 }
 
 .section-card:nth-child(2) {
     animation-delay: 1s;
+    border-color: var(--construction-yellow);
 }
 
 .section-card::before {
@@ -711,10 +713,10 @@ header {
     animation: slideUp 0.6s ease-out backwards;
 }
 
-.step-card[data-step="1"] { animation-delay: 0.1s; }
-.step-card[data-step="2"] { animation-delay: 0.2s; }
-.step-card[data-step="3"] { animation-delay: 0.3s; }
-.step-card[data-step="4"] { animation-delay: 0.4s; }
+.step-card[data-step="1"] { animation-delay: 0.1s; border-color: var(--construction-yellow); }
+.step-card[data-step="2"] { animation-delay: 0.2s; border-color: var(--construction-yellow); }
+.step-card[data-step="3"] { animation-delay: 0.3s; border-color: var(--construction-yellow); }
+.step-card[data-step="4"] { animation-delay: 0.4s; border-color: var(--construction-yellow); }
 
 .step-card::before {
     content: '';
@@ -731,7 +733,6 @@ header {
 
 .step-card:hover {
     transform: translateY(-10px);
-    border-color: var(--construction-yellow);
     box-shadow: 0 20px 60px rgba(253, 185, 19, 0.3);
 }
 
@@ -1411,24 +1412,8 @@ footer {
         border-width: 1px;
     }
     
-    /* Постоянная подсветка карточек на мобильных */
-    .section-card:first-child {
-        border: 0.5px solid var(--safety-green);
-        box-shadow:
-            0 10px 30px rgba(0, 0, 0, 0.5),
-            0 0 40px rgba(6, 255, 165, 0.3),
-            inset 0 1px 0 rgba(6, 255, 165, 0.2);
-    }
-    
-    .section-card:last-child {
-        border: 0.5px solid var(--construction-yellow);
-        box-shadow:
-            0 10px 30px rgba(0, 0, 0, 0.5),
-            0 0 40px rgba(253, 185, 19, 0.3),
-            inset 0 1px 0 rgba(253, 185, 19, 0.2);
-    }
-    
-    
+    /* Постоянная подсветка карточек на мобильных — убрана, так как обводка теперь постоянная */
+
     .logo-title {
         font-size: 1.5rem;
         letter-spacing: 2px;
