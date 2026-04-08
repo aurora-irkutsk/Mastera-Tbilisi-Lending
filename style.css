@@ -1405,13 +1405,13 @@ footer {
 @media (max-width: 768px) {
     header {
         padding: 1.2rem 4%;
-        justify-content: center;
+        justify-content: flex-start;
     }
 
     .logo {
         gap: 0.8rem;
         flex: 1 1 100%;
-        justify-content: center;
+        justify-content: flex-start;
     }
     
     .online-counter {
