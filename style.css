@@ -202,12 +202,6 @@ header {
     animation: fadeIn 1s ease-out 0.3s backwards;
 }
 
-.subtitle-bot {
-    color: var(--safety-green);
-    font-size: 1.1rem;
-    margin-top: 0.3rem;
-}
-
 /* ============================================
    СЧЕТЧИК ОНЛАЙН МАСТЕРОВ
    ============================================ */

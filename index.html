@@ -5,6 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Редирект с /index.html на / -->
+  <script>
+    if (window.location.pathname.endsWith('/index.html')) {
+      window.location.replace(window.location.origin + '/');
+    }
+  </script>
+
   <!-- SEO -->
   <title>Мастера Тбилиси — 49+ мастеров онлайн | ოსტატები თბილისში</title>
   <meta name="description"
@@ -12,6 +19,9 @@
   <meta name="author" content="Мастера Тбилиси | ოსტატები თბილისში">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
   <link rel="canonical" href="https://mastera-tbilisi.ge/">
+  <link rel="alternate" hreflang="ru" href="https://mastera-tbilisi.ge/">
+  <link rel="alternate" hreflang="ka" href="https://mastera-tbilisi.ge/">
+  <link rel="alternate" hreflang="x-default" href="https://mastera-tbilisi.ge/">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
@@ -389,13 +399,13 @@
         <div class="subtitle" data-ru="// Найдем мастера для любой задачи" data-ka="// ვიპოვით ოსტატს ნებისმიერი ამოცანისთვის">// Найдем мастера для любой задачи</div>
       </div>
     </div>
-    
+
     <!-- Переключатель языков -->
     <div class="language-switcher">
       <button class="lang-btn active" data-lang="ru">RU</button>
       <button class="lang-btn" data-lang="ka">ქარ</button>
     </div>
-    
+
     <!-- Счетчик онлайн мастеров -->
     <div class="online-counter">
       <span class="online-indicator"></span>
