@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initBotClickTracking();
     initLeadFormTracking();
     initMasterLeadFormTracking();
+    initFAQ();
 });
 
 // ============================================
@@ -173,24 +174,6 @@ function initButtonHoverEffects() {
 }
 
 // ============================================
-// 5. АНИМАЦИЯ ИКОНОК
-// ============================================
-
-function animateIcons() {
-    const icons = document.querySelectorAll('.section-icon');
-    icons.forEach((icon, index) => {
-        setTimeout(() => {
-            icon.style.animation = 'bounce 2s ease-in-out infinite';
-        }, index * 200);
-    });
-}
-
-// Запуск анимации иконок после загрузки
-window.addEventListener('load', () => {
-    setTimeout(animateIcons, 500);
-});
-
-// ============================================
 // 6. СЧЕТЧИК ОНЛАЙН МАСТЕРОВ (ЖИВАЯ СТАТИСТИКА)
 // ============================================
 
@@ -249,12 +232,12 @@ function initOnlineCounter() {
 
 function initFAQ() {
     const faqItems = document.querySelectorAll('.faq-item');
-    
+
     if (faqItems.length === 0) return;
-    
+
     faqItems.forEach(item => {
         const question = item.querySelector('.faq-question');
-        
+
         question.addEventListener('click', () => {
             // Закрываем все остальные FAQ
             faqItems.forEach(otherItem => {
@@ -262,17 +245,12 @@ function initFAQ() {
                     otherItem.classList.remove('active');
                 }
             });
-            
+
             // Переключаем текущий FAQ
             item.classList.toggle('active');
         });
     });
 }
-
-// Инициализация FAQ при загрузке
-document.addEventListener('DOMContentLoaded', () => {
-    initFAQ();
-});
 
 // ============================================
 // ПЕРЕКЛЮЧЕНИЕ ЯЗЫКОВ
@@ -890,10 +868,10 @@ function initBotClickTracking() {
             
             if (this.classList.contains('cta-clients')) {
                 buttonType = 'client';
-                buttonLabel = 'Найти мастера';
+                buttonLabel = 'Оставить заявку (клиент)';
             } else if (this.classList.contains('cta-masters')) {
                 buttonType = 'master';
-                buttonLabel = 'Получать заказы';
+                buttonLabel = 'Оставить заявку (мастер)';
             } else if (this.classList.contains('cta-footer')) {
                 buttonType = 'footer';
                 buttonLabel = 'Заказать мастера';
