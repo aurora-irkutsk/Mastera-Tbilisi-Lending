@@ -177,6 +177,8 @@ header {
 
 .logo-text {
     text-align: left;
+    position: relative;
+    z-index: 2;
 }
 
 .logo-title {
@@ -211,11 +213,31 @@ header {
     text-decoration: none;
     transition: all 0.3s ease;
     white-space: nowrap;
+    cursor: pointer;
+    pointer-events: auto;
+    padding: 0.2rem 0;
+    display: inline-block;
 }
 
 .header-phone-link:hover {
     color: var(--construction-yellow);
     text-shadow: 0 0 10px rgba(253, 185, 19, 0.5);
+}
+
+.header-support {
+    margin-top: 0.2rem;
+}
+
+.header-support-link {
+    color: var(--construction-yellow);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.header-support-link:hover {
+    color: var(--construction-orange);
+    text-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
 }
 
 /* ============================================
