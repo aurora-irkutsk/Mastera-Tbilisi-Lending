@@ -2175,6 +2175,10 @@ footer {
         padding: 0.9rem;
         font-size: 0.95rem;
     }
+
+    .consent-label {
+        font-size: 0.8rem;
+    }
     
     /* Адаптация кнопки "Вверх" для мобильных */
     .scroll-to-top {
