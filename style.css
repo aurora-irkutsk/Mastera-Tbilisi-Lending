@@ -202,6 +202,22 @@ header {
     animation: fadeIn 1s ease-out 0.3s backwards;
 }
 
+.header-phone {
+    margin-top: 0.3rem;
+}
+
+.header-phone-link {
+    color: var(--safety-green);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.header-phone-link:hover {
+    color: var(--construction-yellow);
+    text-shadow: 0 0 10px rgba(253, 185, 19, 0.5);
+}
+
 /* ============================================
    СЧЕТЧИК ОНЛАЙН МАСТЕРОВ
    ============================================ */
