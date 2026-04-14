@@ -876,19 +876,23 @@ function initBotClickTracking() {
         button.addEventListener('click', function() {
             let buttonType = 'other';
             let buttonLabel = 'Другая кнопка';
-            
+            let eventName = 'button_click';
+
             if (this.classList.contains('cta-clients')) {
                 buttonType = 'client';
                 buttonLabel = 'Оставить заявку (клиент)';
+                eventName = 'open_client_lead_form';
             } else if (this.classList.contains('cta-masters')) {
                 buttonType = 'master';
                 buttonLabel = 'Оставить заявку (мастер)';
+                eventName = 'open_master_lead_form';
             } else if (this.classList.contains('cta-footer')) {
                 buttonType = 'footer';
                 buttonLabel = 'Заказать мастера';
+                eventName = 'open_client_lead_form';
             }
-            
-            gtag('event', 'telegram_bot_click', {
+
+            gtag('event', eventName, {
                 'event_category': 'engagement',
                 'event_label': buttonLabel,
                 'button_type': buttonType
