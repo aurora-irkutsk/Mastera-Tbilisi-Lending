@@ -2230,11 +2230,19 @@ footer {
     user-select: none;
 }
 
+@keyframes spin-telegram {
+    0% { transform: translateY(0) rotate(0deg); }
+    16% { transform: translateY(0) rotate(1080deg); } /* 3 оборота вправо */
+    50% { transform: translateY(0) rotate(1080deg); } /* Пауза */
+    66% { transform: translateY(0) rotate(0deg); }    /* 3 оборота влево */
+    100% { transform: translateY(0) rotate(0deg); }   /* Пауза */
+}
+
 .scroll-to-top.visible {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
-    animation: bounce-vertical 1.5s ease-in-out infinite;
+    animation: spin-telegram 9s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
 }
 
 .scroll-to-top.telegram-fab {
@@ -2249,7 +2257,7 @@ footer {
     transform: scale(1.1) !important;
     box-shadow: 0 6px 25px rgba(0, 136, 204, 0.6);
     border-color: #0099e6;
-    animation: none; /* Отключаем подпрыгивание при наведении */
+    animation-play-state: paused; /* Останавливаем вращение при наведении */
 }
 
 .scroll-to-top.telegram-fab img {
