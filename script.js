@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initTypingEffect();
     initModalForms();
     initScrollToTop();
-    initBotClickTracking();
     initLeadFormTracking();
     initMasterLeadFormTracking();
     initFAQ();
@@ -537,12 +536,6 @@ function openClientLeadForm() {
     if (modal) {
         modal.style.display = 'flex';
     }
-
-    // Трекинг события для аналитики
-    gtag('event', 'open_lead_form', {
-        'event_category': 'engagement',
-        'event_label': 'Открыта форма заявки'
-    });
 }
 
 function closeClientLeadForm() {
@@ -589,12 +582,6 @@ function openMasterLeadForm() {
     if (modal) {
         modal.style.display = 'flex';
     }
-
-    // Трекинг события для аналитики
-    gtag('event', 'open_master_lead_form', {
-        'event_category': 'engagement',
-        'event_label': 'Открыта форма заявки мастера'
-    });
 }
 
 function closeMasterLeadForm() {
@@ -629,23 +616,15 @@ function initMasterLeadFormTracking() {
                 }
             }).then(response => {
                 if (response.ok) {
-                    // Трекинг конверсии для Google Ads
-                    // ВАЖНО: Замените AW-XXXXXXXXX на ваш реальный Google Ads Conversion ID
-                    if (typeof gtag === 'function') {
-                        gtag('event', 'conversion', {
-                            'send_to': 'AW-XXXXXXXXX/Mastera-Tbilisi',
-                            'event_category': 'leads',
-                            'event_label': 'SUBMIT_LEAD_FORM_2',
-                            'value': 1.0,
-                            'currency': 'GEL'
-                        });
-
-                        gtag('event', 'submit_master_lead_form', {
-                            'event_category': 'conversion',
-                            'event_label': 'Заявка мастера отправлена',
-                            'form_location': 'Как начать получать заказы'
-                        });
-                    }
+                    // Трекинг конверсии для Google Tag Manager
+                    dataLayer.push({
+                        'event': 'submit_master_lead_form',
+                        'event_category': 'conversion',
+                        'event_label': 'Заявка мастера отправлена',
+                        'form_location': 'Как начать получать заказы',
+                        'value': 1.0,
+                        'currency': 'GEL'
+                    });
 
                     // Закрываем форму и показываем благодарность
                     closeMasterLeadForm();
@@ -759,25 +738,15 @@ function initLeadFormTracking() {
                 }
             }).then(response => {
                 if (response.ok) {
-                    // Трекинг конверсии для Google Ads
-                    // ВАЖНО: Замените AW-XXXXXXXXX на ваш реальный Google Ads Conversion ID
-                    // Его можно найти в Google Ads → Инструменты → Конверсии → Отслеживание конверсий
-                    if (typeof gtag === 'function') {
-                        gtag('event', 'conversion', {
-                            'send_to': 'AW-XXXXXXXXX/Mastera-Tbilisi',
-                            'event_category': 'leads',
-                            'event_label': 'SUBMIT_LEAD_FORM_1',
-                            'value': 1.0,
-                            'currency': 'GEL'
-                        });
-
-                        // Альтернативный вариант (если используете Google Tag Manager)
-                        gtag('event', 'submit_lead_form', {
-                            'event_category': 'conversion',
-                            'event_label': 'Заявка отправлена',
-                            'form_location': 'Как найти мастера'
-                        });
-                    }
+                    // Трекинг конверсии для Google Tag Manager
+                    dataLayer.push({
+                        'event': 'submit_client_lead_form',
+                        'event_category': 'conversion',
+                        'event_label': 'Заявка отправлена',
+                        'form_location': 'Как найти мастера',
+                        'value': 1.0,
+                        'currency': 'GEL'
+                    });
 
                     // Закрываем форму и показываем благодарность
                     closeClientLeadForm();
@@ -865,40 +834,6 @@ function validateLeadForm(e) {
     }
 
     return true;
-}
-
-// ============================================
-// ОТСЛЕЖИВАНИЕ КЛИКОВ ПО КНОПКАМ TELEGRAM-БОТА
-// ============================================
-
-function initBotClickTracking() {
-    document.querySelectorAll('.cta-button').forEach(button => {
-        button.addEventListener('click', function() {
-            let buttonType = 'other';
-            let buttonLabel = 'Другая кнопка';
-            let eventName = 'button_click';
-
-            if (this.classList.contains('cta-clients')) {
-                buttonType = 'client';
-                buttonLabel = 'Оставить заявку (клиент)';
-                eventName = 'open_client_lead_form';
-            } else if (this.classList.contains('cta-masters')) {
-                buttonType = 'master';
-                buttonLabel = 'Оставить заявку (мастер)';
-                eventName = 'open_master_lead_form';
-            } else if (this.classList.contains('cta-footer')) {
-                buttonType = 'footer';
-                buttonLabel = 'Заказать мастера';
-                eventName = 'open_client_lead_form';
-            }
-
-            gtag('event', eventName, {
-                'event_category': 'engagement',
-                'event_label': buttonLabel,
-                'button_type': buttonType
-            });
-        });
-    });
 }
 
 // ============================================
