@@ -629,7 +629,7 @@ function initMasterLeadFormTracking() {
                       'event_category': 'forms',
                       'event_label': 'master_lead_form',
                       'form_location': 'Как начать получать заказы',
-                      'value': 0.5,
+                      'value': 1,
                       'currency': 'USD'
                     });
 
@@ -758,7 +758,7 @@ function initClientLeadFormTracking() {
                         'event_category': 'forms',
                         'event_label': 'client_lead_form',
                         'form_location': 'Как найти мастера',
-                        'value': 0.5,
+                        'value': 1,
                         'currency': 'USD'
                       });
                     }
@@ -880,7 +880,7 @@ function initTelegramButtonTracking() {
       if (typeof gtag === 'function') {
         gtag('event', 'conversion', {
           'send_to': 'AW-17979861714/ZQAYCNbLxpwcENLVu_1C',
-          'value': 0.2,
+          'value': 0.5,
           'currency': 'USD'
         });
         
