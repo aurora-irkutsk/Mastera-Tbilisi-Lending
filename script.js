@@ -616,14 +616,20 @@ function initMasterLeadFormTracking() {
                 }
             }).then(response => {
                 if (response.ok) {
-                    // Трекинг конверсии для Google Tag Manager
-                    dataLayer.push({
-                        'event': 'submit_master_lead_form',
-                        'event_category': 'conversion',
-                        'event_label': 'Заявка мастера отправлена',
-                        'form_location': 'Как начать получать заказы',
-                        'value': 1.0,
-                        'currency': 'GEL'
+                    // Конверсия для Google Ads (Мастер)
+                    gtag('event', 'conversion', {
+                      'send_to': 'AW-17979861714/YDu4CLemvpwcENLVu_1C',
+                      'value': 0.5,
+                      'currency': 'USD'
+                    });
+
+                    // 📊 Событие для GA4 (опционально, чтобы видеть в аналитике)
+                    gtag('event', 'generate_lead', {
+                      'event_category': 'forms',
+                      'event_label': 'master_lead_form',
+                      'form_location': 'Как начать получать заказы',
+                      'value': 0.5,
+                      'currency': 'USD'
                     });
 
                     // Закрываем форму и показываем благодарность
@@ -738,15 +744,23 @@ function initLeadFormTracking() {
                 }
             }).then(response => {
                 if (response.ok) {
-                    // Трекинг конверсии для Google Tag Manager
-                    dataLayer.push({
-                        'event': 'submit_client_lead_form',
-                        'event_category': 'conversion',
-                        'event_label': 'Заявка отправлена',
+                    // Конверсия для Google Ads (Клиент)
+                    if (typeof gtag === 'function') {
+                      gtag('event', 'conversion', {
+                        'send_to': 'AW-17979861714/I6VRCOzYvpwcENLVu_1C',
+                        'value': 0.5,
+                        'currency': 'USD'
+                      });
+                  
+                      // 📊 2. Событие для GA4 (для аналитики)
+                      gtag('event', 'generate_lead', {
+                        'event_category': 'forms',
+                        'event_label': 'client_lead_form',
                         'form_location': 'Как найти мастера',
-                        'value': 1.0,
-                        'currency': 'GEL'
-                    });
+                        'value': 0.5,
+                        'currency': 'USD'
+                      });
+                    }
 
                     // Закрываем форму и показываем благодарность
                     closeClientLeadForm();
