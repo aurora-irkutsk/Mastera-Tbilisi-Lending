@@ -259,7 +259,17 @@ function initFAQ() {
 
 function initLanguageSwitcher() {
     const langButtons = document.querySelectorAll('.lang-btn');
-    const savedLang = localStorage.getItem('language') || 'ru';
+    const browserLang = navigator.language || navigator.userLanguage;
+
+    let defaultLang = 'ru';
+    
+    if (browserLang.startsWith('ka')) {
+        defaultLang = 'ka';
+    } else if (browserLang.startsWith('en')) {
+        defaultLang = 'en';
+    }
+    
+    const savedLang = localStorage.getItem('language') || defaultLang;
     
     // Устанавливаем сохраненный язык
     setLanguage(savedLang);
