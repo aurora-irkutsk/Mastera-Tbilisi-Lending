@@ -594,71 +594,69 @@ function closeMasterLeadForm() {
 
 // Трекинг отправки формы заявки мастера
 function initMasterLeadFormTracking() {
-    const masterLeadForm = document.getElementById('masterLeadForm');
-    
-    if (masterLeadForm) {
-        masterLeadForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+  const masterLeadForm = document.getElementById('masterLeadForm');
+  if (!masterLeadForm) return;
 
-            // Проверяем валидность перед отправкой
-            if (!validateMasterLeadForm(e)) {
-                return;
-            }
+  let isSubmitting = false;
 
-            // Собираем данные формы
-            const formData = new FormData(masterLeadForm);
+  masterLeadForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-            // Отправляем форму через Formspree
-            fetch('https://formspree.io/f/mykdoebj', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            }).then(response => {
-                if (response.ok) {
-                    // Конверсия для Google Ads (Мастер)
-                    if (typeof gtag === 'function') {
-                        gtag('event', 'conversion', {
-                          'send_to': 'AW-17979861714/YDu4CLemvpwcENLVu_1C',
-                          'value': 1,
-                          'currency': 'USD'
-                        });
+    if (isSubmitting) return;
+    if (!validateMasterLeadForm(e)) return;
 
-                        // 📊 Событие для GA4 (опционально, чтобы видеть в аналитике)
-                        gtag('event', 'generate_lead', {
-                          'event_category': 'forms',
-                          'event_label': 'master_lead_form',
-                          'form_location': 'Как начать получать заказы',
-                          'value': 1,
-                          'currency': 'USD'
-                        });
-                    }
-                    // Закрываем форму и показываем благодарность
-                    closeMasterLeadForm();
-                    openMasterThankYou();
-                    masterLeadForm.reset();
-                } else {
-                    alert('Произошла ошибка при отправке. Пожалуйста, попробуйте ещё раз.');
-                }
-            }).catch(error => {
-                console.error('Error:', error);
-                alert('Произошла ошибка при отправке. Пожалуйста, попробуйте ещё раз.');
-            });
+    isSubmitting = true;
+
+    const formData = new FormData(masterLeadForm);
+    const transactionId = 'master_' + Date.now();
+
+    try {
+      const response = await fetch('https://formspree.io/f/mykdoebj', {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Submit failed');
+
+      if (typeof gtag === 'function') {
+        gtag('event', 'conversion', {
+          send_to: 'AW-17979861714/YDu4CLemvpwcENLVu_1C',
+          value: 1,
+          currency: 'USD',
+          transaction_id: transactionId
         });
-    }
 
-    // Управление кнопкой submit через checkbox
-    const masterLeadConsent = document.getElementById('masterLeadConsent');
-    const masterLeadSubmitBtn = document.getElementById('masterLeadSubmitBtn');
-
-    if (masterLeadConsent && masterLeadSubmitBtn) {
-        masterLeadSubmitBtn.disabled = !masterLeadConsent.checked;
-        
-        masterLeadConsent.addEventListener('change', function() {
-            masterLeadSubmitBtn.disabled = !this.checked;
+        gtag('event', 'generate_lead', {
+          form_name: 'master_lead_form',
+          form_location: 'Как начать получать заказы',
+          user_type: 'master'
         });
+      }
+
+      closeMasterLeadForm();
+      openMasterThankYou();
+      masterLeadForm.reset();
+
+    } catch (error) {
+      console.error(error);
+      alert('Ошибка при отправке. Попробуйте ещё раз.');
+      isSubmitting = false;
     }
+  });
+
+  // checkbox логика
+  const masterLeadConsent = document.getElementById('masterLeadConsent');
+  const masterLeadSubmitBtn = document.getElementById('masterLeadSubmitBtn');
+
+  if (masterLeadConsent && masterLeadSubmitBtn) {
+    masterLeadSubmitBtn.disabled = !masterLeadConsent.checked;
+
+    masterLeadConsent.addEventListener('change', function() {
+      masterLeadSubmitBtn.disabled = !this.checked;
+    });
+  }
 }
 
 function validateMasterLeadForm(e) {
@@ -723,73 +721,69 @@ function validateMasterLeadForm(e) {
 
 // Трекинг отправки формы заявки клиента
 function initClientLeadFormTracking() {
-    const leadForm = document.getElementById('clientLeadForm');
-    
-    if (leadForm) {
-        leadForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+  const leadForm = document.getElementById('clientLeadForm');
+  if (!leadForm) return;
 
-            // Проверяем валидность перед отправкой
-            if (!validateLeadForm(e)) {
-                return;
-            }
+  let isSubmitting = false;
 
-            // Собираем данные формы
-            const formData = new FormData(leadForm);
+  leadForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-            // Отправляем форму через Formspree
-            fetch('https://formspree.io/f/xpqjbpyk', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            }).then(response => {
-                if (response.ok) {
-                    // Конверсия для Google Ads (Клиент)
-                    if (typeof gtag === 'function') {
-                      gtag('event', 'conversion', {
-                        'send_to': 'AW-17979861714/I6VRCOzYvpwcENLVu_1C',
-                        'value': 1.2,
-                        'currency': 'USD'
-                      });
-                  
-                      // 📊 2. Событие для GA4 (для аналитики)
-                      gtag('event', 'generate_lead', {
-                        'event_category': 'forms',
-                        'event_label': 'client_lead_form',
-                        'form_location': 'Как найти мастера',
-                        'value': 1.2,
-                        'currency': 'USD'
-                      });
-                    }
+    if (isSubmitting) return;
+    if (!validateLeadForm(e)) return;
 
-                    // Закрываем форму и показываем благодарность
-                    closeClientLeadForm();
-                    openThankYou();
-                    leadForm.reset();
-                } else {
-                    alert('Произошла ошибка при отправке. Пожалуйста, попробуйте ещё раз.');
-                }
-            }).catch(error => {
-                console.error('Error:', error);
-                alert('Произошла ошибка при отправке. Пожалуйста, попробуйте ещё раз.');
-            });
+    isSubmitting = true;
+
+    const formData = new FormData(leadForm);
+    const transactionId = 'client_' + Date.now();
+
+    try {
+      const response = await fetch('https://formspree.io/f/xpqjbpyk', {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Submit failed');
+
+      if (typeof gtag === 'function') {
+        gtag('event', 'conversion', {
+          send_to: 'AW-17979861714/I6VRCOzYvpwcENLVu_1C',
+          value: 1.2,
+          currency: 'USD',
+          transaction_id: transactionId
         });
-    }
 
-    // Управление кнопкой submit через checkbox
-    const leadConsent = document.getElementById('leadConsent');
-    const leadSubmitBtn = document.getElementById('leadSubmitBtn');
-
-    if (leadConsent && leadSubmitBtn) {
-        // Кнопка активна по умолчанию (чекбокс checked)
-        leadSubmitBtn.disabled = !leadConsent.checked;
-        
-        leadConsent.addEventListener('change', function() {
-            leadSubmitBtn.disabled = !this.checked;
+        gtag('event', 'generate_lead', {
+          form_name: 'client_lead_form',
+          form_location: 'Как найти мастера',
+          user_type: 'client'
         });
+      }
+
+      closeClientLeadForm();
+      openThankYou();
+      leadForm.reset();
+
+    } catch (error) {
+      console.error(error);
+      alert('Ошибка при отправке. Попробуйте ещё раз.');
+      isSubmitting = false;
     }
+  });
+
+  // checkbox
+  const leadConsent = document.getElementById('leadConsent');
+  const leadSubmitBtn = document.getElementById('leadSubmitBtn');
+
+  if (leadConsent && leadSubmitBtn) {
+    leadSubmitBtn.disabled = !leadConsent.checked;
+
+    leadConsent.addEventListener('change', function() {
+      leadSubmitBtn.disabled = !this.checked;
+    });
+  }
 }
 
 function validateLeadForm(e) {
@@ -886,22 +880,34 @@ function initTelegramButtonTracking() {
 
     const transactionId = 'telegram_' + Date.now();
 
+    let redirected = false;
+
+    const goToTelegram = () => {
+      if (!redirected) {
+        redirected = true;
+        window.location.href = telegramButton.href;
+      }
+    };
+
     if (typeof gtag === 'function') {
+      // Google Ads конверсия
       gtag('event', 'contact', {
-        'send_to': 'AW-17979861714/ZQAYCNbLxpwcENLVu_1C',
-        'value': 0.2,
-        'currency': 'USD',
-        'transaction_id': transactionId,
-        'event_callback': function() {
-          window.location.href = telegramButton.href;
-        }
+        send_to: 'AW-17979861714/ZQAYCNbLxpwcENLVu_1C',
+        value: 0,
+        currency: 'USD',
+        transaction_id: transactionId,
+        event_callback: goToTelegram
       });
 
+      // GA4 событие
       gtag('event', 'contact', {
         method: 'telegram'
       });
+
+      // fallback
+      setTimeout(goToTelegram, 800);
     } else {
-      window.location.href = telegramButton.href;
+      goToTelegram();
     }
   };
 
