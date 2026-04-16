@@ -2248,7 +2248,6 @@ footer {
 .scroll-to-top.telegram-fab {
     width: 65px;
     height: 65px;
-    border: 2px solid var(--construction-yellow);
     overflow: hidden;
     display: flex;
     align-items: center;
