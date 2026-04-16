@@ -876,40 +876,31 @@ function initTelegramButtonTracking() {
 
   if (!telegramButton) return;
 
-  const handler = function(e) {
+  const handler = function (e) {
     if (isButtonClicked) return;
     isButtonClicked = true;
 
     e.preventDefault();
 
-    const transactionId = 'telegram_' + Date.now();
-
-    let redirected = false;
+    const redirected = false;
 
     const goToTelegram = () => {
       if (!redirected) {
-        redirected = true;
         window.location.href = telegramButton.href;
       }
     };
 
     if (typeof gtag === 'function') {
-      // Google Ads конверсия
-      gtag('event', 'contact', {
-        send_to: 'AW-17979861714/ZQAYCNbLxpwcENLVu_1C',
-        value: 0,
-        currency: 'USD',
-        transaction_id: transactionId,
-        event_callback: goToTelegram
+
+      // 📊 GA4 событие (ТОЛЬКО аналитика, НЕ конверсия Ads)
+      gtag('event', 'telegram_click', {
+        method: 'telegram',
+        event_category: 'engagement'
       });
 
-      // GA4 событие
-      gtag('event', 'contact', {
-        method: 'telegram'
-      });
+      // fallback на случай если gtag не успеет отправить
+      setTimeout(goToTelegram, 600);
 
-      // fallback
-      setTimeout(goToTelegram, 800);
     } else {
       goToTelegram();
     }
