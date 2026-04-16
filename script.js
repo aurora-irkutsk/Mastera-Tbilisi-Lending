@@ -874,28 +874,38 @@ function initScrollToTop() {
 // ============================================
 function initTelegramButtonTracking() {
   const telegramButton = document.getElementById('scrollToTop');
-  
-  if (telegramButton) {
-    telegramButton.addEventListener('click', function() {
-      // Конверсия для Google Ads Telegram Bot
-      if (typeof gtag === 'function') {
-        gtag('event', 'contact', {
-          'send_to': 'AW-17979861714/ZQAYCNbLxpwcENLVu_1C',
-          'value': 0.2,
-          'currency': 'USD'
-        });
-        
-        // 📊 Событие для GA4 (опционально)
-        gtag('event', 'contact', {
-          'event_category': 'engagement',
-          'event_label': 'telegram_button_click',
-          'method': 'telegram',
-          'value': 0.2,
-          'currency': 'USD'
-        });
-      }
-    });
-  }
+  let isButtonClicked = false;
+
+  if (!telegramButton) return;
+
+  const handler = function(e) {
+    if (isButtonClicked) return;
+    isButtonClicked = true;
+
+    e.preventDefault();
+
+    const transactionId = 'telegram_' + Date.now();
+
+    if (typeof gtag === 'function') {
+      gtag('event', 'contact', {
+        'send_to': 'AW-17979861714/ZQAYCNbLxpwcENLVu_1C',
+        'value': 0.2,
+        'currency': 'USD',
+        'transaction_id': transactionId,
+        'event_callback': function() {
+          window.location.href = telegramButton.href;
+        }
+      });
+
+      gtag('event', 'contact', {
+        method: 'telegram'
+      });
+    } else {
+      window.location.href = telegramButton.href;
+    }
+  };
+
+  telegramButton.addEventListener('click', handler);
 }
 
 // ============================================
