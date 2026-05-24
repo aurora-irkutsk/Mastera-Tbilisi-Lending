@@ -675,30 +675,40 @@ function initScrollToTop() {
 }
 
 // ============================================
-// 14. ТРЕКИНГ КНОПКИ TELEGRAM
+// 14. ТРЕКИНГ КНОПКИ WHATSAPP
 // ============================================
 
-function initTelegramButtonTracking() {
-    const telegramButton = document.getElementById('scrollToTop');
-    if (!telegramButton) return;
+function initWhatsAppButtonTracking() {
+    const whatsappButton = document.getElementById('scrollToTop');
+    if (!whatsappButton) return;
 
     let isButtonClicked = false;
 
-    telegramButton.addEventListener('click', function (e) {
+    whatsappButton.addEventListener('click', function (e) {
+        // Защита от повторных кликов
         if (isButtonClicked) return;
         isButtonClicked = true;
+        
+        // Предотвращаем стандартный переход, чтобы сначала отправить событие в аналитику
         e.preventDefault();
 
-        const goToTelegram = () => { window.location.href = telegramButton.href; };
+        const goToWhatsApp = () => { 
+            window.location.href = whatsappButton.href; 
+        };
 
+        // Если Google Analytics (gtag) подключён — отправляем событие
         if (typeof gtag === 'function') {
-            gtag('event', 'telegram_click', {
-                method: 'telegram',
-                event_category: 'engagement'
+            gtag('event', 'whatsapp_click', {
+                event_category: 'engagement',
+                event_label: 'whatsapp_fab',  // можно добавить метку для отчётов
+                method: 'whatsapp'            // параметр для сравнения с другими каналами
             });
-            setTimeout(goToTelegram, 600);
+            
+            // Небольшая задержка, чтобы событие успело отправиться перед переходом
+            setTimeout(goToWhatsApp, 600);
         } else {
-            goToTelegram();
+            // Если аналитики нет — переходим сразу
+            goToWhatsApp();
         }
     });
 }
