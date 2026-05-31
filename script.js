@@ -334,6 +334,14 @@ function setLanguage(lang) {
     if (metaDesc && metaDesc.dataset[lang]) {
         metaDesc.setAttribute('content', metaDesc.dataset[lang]);
     }
+
+    // title-атрибуты на полях ввода (браузерные подсказки при нативной валидации)
+    document.querySelectorAll('input[type="tel"][pattern]').forEach(el => {
+        el.title = t('phoneInvalid');
+    });
+    document.querySelectorAll('input[name="telegram"][pattern]').forEach(el => {
+        el.title = t('telegramInvalid');
+    });
 }
 
 // ============================================
