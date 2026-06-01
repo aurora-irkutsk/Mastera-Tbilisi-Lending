@@ -1775,7 +1775,7 @@ footer {
         padding: 8rem 4%;
         background:
             linear-gradient(rgba(10, 10, 10, 0.7), rgba(10, 10, 10, 0.8)),
-            url('../image/footer-cta-bg.webp') center/cover no-repeat;
+            url('../image/footer-cta-bg.webp') center/contain no-repeat;
         background-color: #1a1a1a;
     }
 

@@ -699,6 +699,16 @@ function initWhatsAppButtonTracking() {
     const whatsappButton = document.getElementById('scrollToTop');
     if (!whatsappButton) return;
 
+    // Тексты сообщений для WhatsApp
+    const waTexts = {
+        ru: encodeURIComponent('Здравствуйте! Нужен мастер в Тбилиси.'),
+        ka: encodeURIComponent('გამარჯობა! მჭირდება ოსტატი თბილისში.'),
+        en: encodeURIComponent('Hello! I need a handyman in Tbilisi.')
+    };
+    const lang = window.__FORCE_LANG__ || 'ru';
+    const waText = waTexts[lang] || waTexts.ru;
+    whatsappButton.href = 'https://wa.me/995557645196?text=' + waText;
+
     let isButtonClicked = false;
 
     whatsappButton.addEventListener('click', function (e) {
