@@ -430,6 +430,165 @@ header {
 }
 
 /* ============================================
+   НАШИ УСЛУГИ — SERVICES SECTION
+   ============================================ */
+.services-section {
+    position: relative;
+    z-index: 1;
+    padding: 3rem 5% 4rem;
+}
+
+.services-heading {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    color: var(--construction-yellow);
+}
+
+.services-subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+    font-weight: 500;
+    text-align: center;
+    color: var(--safety-green);
+    margin-bottom: 2.5rem;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.service-card {
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(253, 185, 19, 0.3);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--construction-yellow), var(--construction-orange));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+}
+
+.service-card:hover {
+    background: rgba(0, 0, 0, 0.5);
+    transform: translateY(-8px);
+    border-color: var(--construction-yellow);
+    box-shadow: 0 20px 50px rgba(253, 185, 19, 0.15);
+}
+
+.service-card:hover::before {
+    transform: scaleX(1);
+}
+
+.service-card-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(253, 185, 19, 0.2), rgba(253, 185, 19, 0.05));
+    border: 3px solid var(--construction-yellow);
+    box-shadow: 0 0 25px rgba(253, 185, 19, 0.2);
+    transition: all 0.4s ease;
+    flex-shrink: 0;
+}
+
+.service-card:hover .service-card-icon {
+    transform: scale(1.1);
+    box-shadow: 0 0 40px rgba(253, 185, 19, 0.4);
+}
+
+.service-card-icon svg {
+    width: 36px;
+    height: 36px;
+    color: var(--construction-yellow);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.service-card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.6rem;
+}
+
+.service-card-desc {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #aaa;
+    line-height: 1.5;
+    margin-bottom: 1.2rem;
+    flex: 1;
+}
+
+.service-card-link {
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--construction-yellow);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border: 2px solid var(--construction-yellow);
+    border-radius: 50px;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.service-card:hover .service-card-link {
+    background: var(--construction-yellow);
+    color: var(--dark-concrete);
+}
+
+@media (max-width: 768px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+    }
+}
+
+.services-grid--two {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 750px;
+}
+
+@media (max-width: 768px) {
+    .services-grid--two {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+    }
+}
+
+/* ============================================
    СЕКЦИИ (ДЛЯ МАСТЕРОВ / ДЛЯ КЛИЕНТОВ)
    ============================================ */
 .sections-container {
@@ -447,7 +606,9 @@ header {
 }
 
 .section-card {
-    background: var(--light-concrete);
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     padding: 3rem;
     border-radius: 8px;
     position: relative;
@@ -483,11 +644,13 @@ header {
 }
 
 .section-card:nth-child(1):hover {
+    background: rgba(0, 0, 0, 0.5);
     transform: translateY(-8px);
     box-shadow: 0 20px 40px rgba(6, 255, 165, 0.2);
 }
 
 .section-card:nth-child(2):hover {
+    background: rgba(0, 0, 0, 0.5);
     transform: translateY(-8px);
     box-shadow: 0 20px 40px rgba(253, 185, 19, 0.2);
 }
@@ -773,7 +936,9 @@ header {
 }
 
 .step-card {
-    background: var(--light-concrete);
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     padding: 2.5rem 2rem;
     border-radius: 12px;
     position: relative;
@@ -802,6 +967,7 @@ header {
 }
 
 .step-card:hover {
+    background: rgba(0, 0, 0, 0.5);
     transform: translateY(-10px);
     box-shadow: 0 20px 60px rgba(253, 185, 19, 0.3);
 }
@@ -910,7 +1076,9 @@ header {
 }
 
 .testimonial-card {
-    background: var(--light-concrete);
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     padding: 2rem;
     border-radius: 12px;
     border: none;
@@ -949,6 +1117,7 @@ header {
 }
 
 .testimonial-card:hover {
+    background: rgba(0, 0, 0, 0.5);
     transform: translateY(-5px);
     box-shadow: 0 15px 40px rgba(6, 255, 165, 0.2);
 }
@@ -1087,11 +1256,13 @@ header {
 }
 
 .faq-item {
-    background: var(--light-concrete);
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: 12px;
     margin-bottom: 1rem;
     overflow: hidden;
-    border: 2px solid transparent;
+    border: 1px solid rgba(253, 185, 19, 0.3);
     transition: all 0.3s ease;
     animation: slideUp 0.5s ease-out backwards;
 }
@@ -1105,10 +1276,12 @@ header {
 .faq-item:nth-child(7) { animation-delay: 0.4s; }
 
 .faq-item:hover {
+    background: rgba(0, 0, 0, 0.5);
     border-color: var(--construction-yellow);
 }
 
 .faq-item.active {
+    background: rgba(0, 0, 0, 0.5);
     border-color: var(--safety-green);
     box-shadow: 0 8px 30px rgba(6, 255, 165, 0.2);
 }
@@ -1247,7 +1420,9 @@ header {
    FOOTER
    ============================================ */
 footer {
-    background: var(--light-concrete);
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     padding: 2rem 5%;
     text-align: center;
     border-top: 4px solid var(--construction-yellow);
