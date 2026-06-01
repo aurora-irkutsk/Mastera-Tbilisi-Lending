@@ -154,34 +154,12 @@
   white-space: nowrap;
 }
 
-/* Иконка локации */
-.district-tag::before {
-  content: '';
-  display: none;
-}
-
 .district-tag:hover {
   background: rgba(0, 0, 0, 0.5);
   border-color: var(--construction-yellow);
   color: var(--construction-yellow);
   transform: translateY(-3px);
   box-shadow: 0 10px 25px rgba(253, 185, 19, 0.2);
-}
-
-.district-tag:hover::before {
-}
-
-/* Популярные районы (зелёный акцент) */
-.district-tag.popular {
-  border-color: rgba(6, 255, 165, 0.4);
-  background: rgba(6, 255, 165, 0.08);
-}
-
-.district-tag.popular:hover {
-  background: rgba(6, 255, 165, 0.15);
-  border-color: var(--safety-green);
-  box-shadow: 0 10px 25px rgba(6, 255, 165, 0.3);
-  color: var(--safety-green);
 }
 
 /* ============================================
@@ -218,10 +196,6 @@
     border: 1px solid rgba(253, 185, 19, 0.3);
     color: rgba(255, 255, 255, 0.85);
   }
-  .district-tag::before {
-    display: none;
-  }
-}
 
 /* Очень маленькие экраны */
 @media (max-width: 480px) {
@@ -230,66 +204,6 @@
     padding: 0 1rem;
   }
   .district-tag {
-    border-radius: 5px; /* Чуть менее скруглённые для компактности */
+    border-radius: 5px;
   }
-}
-
-/* Хлебные крошки (скрыты визуально, но остаются в Schema.org) */
-.breadcrumb {
-    max-width: 700px;
-    margin: 1rem auto 0;
-    padding: 0 1.5rem;
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.4);
-}
-
-.breadcrumb a {
-    color: rgba(255, 255, 255, 0.5);
-    text-decoration: none;
-}
-
-.breadcrumb a:hover {
-    color: #FDB913;
-}
-
-/* Вспомогательные блоки */
-.service-steps {
-    max-width: 700px;
-    margin: 0 auto 3rem;
-    padding: 0 1.5rem;
-}
-
-.service-steps h2 {
-    color: #06FFA5;
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-}
-
-.service-faq {
-    max-width: 700px;
-    margin: 0 auto 3rem;
-    padding: 0 1.5rem;
-}
-
-.service-faq h2 {
-    color: #06FFA5;
-    font-size: 1.5rem;
-    margin-bottom: 1.2rem;
-    text-align: center;
-}
-
-.service-back {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.service-back a {
-    color: rgba(255, 255, 255, 0.5);
-    text-decoration: none;
-    font-size: 0.85rem;
-}
-
-.service-back a:hover {
-    color: #FDB913;
 }

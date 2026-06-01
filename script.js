@@ -199,7 +199,8 @@ function initOnlineCounter() {
 
     const minCount = 3;
     const maxCount = 16;
-    const initialCount = Math.floor(Math.random() * 8) + 1;
+    const baseVal = parseInt(counterElement.dataset.base, 10);
+    const initialCount = !isNaN(baseVal) ? baseVal : Math.floor(Math.random() * 8) + 1;
     counterElement.textContent = initialCount;
     let currentCount = initialCount;
 
@@ -368,8 +369,6 @@ function initModalForms() {
     // Закрытие по ESC
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            closeClientForm();
-            closeMasterForm();
             closeClientLeadForm();
             closeMasterLeadForm();
             closeThankYou();
@@ -378,36 +377,11 @@ function initModalForms() {
     });
 
     initPhoneFormatting();
-    initConsentCheckboxes();
-
-    const clientForm = document.getElementById('clientForm');
-    const masterForm = document.getElementById('masterForm');
-    if (clientForm) clientForm.addEventListener('submit', validateForm);
-    if (masterForm) masterForm.addEventListener('submit', validateForm);
-}
-
-// Управление кнопками submit через checkbox
-function initConsentCheckboxes() {
-    const clientConsent   = document.getElementById('clientConsent');
-    const clientSubmitBtn = document.getElementById('clientSubmitBtn');
-    const masterConsent   = document.getElementById('masterConsent');
-    const masterSubmitBtn = document.getElementById('masterSubmitBtn');
-
-    if (clientConsent && clientSubmitBtn) {
-        clientConsent.addEventListener('change', function () {
-            clientSubmitBtn.disabled = !this.checked;
-        });
-    }
-    if (masterConsent && masterSubmitBtn) {
-        masterConsent.addEventListener('change', function () {
-            masterSubmitBtn.disabled = !this.checked;
-        });
-    }
 }
 
 // Форматирование телефонных номеров
 function initPhoneFormatting() {
-    const phoneInputs = document.querySelectorAll('#clientPhone, #masterPhone, #leadPhone, #masterLeadPhone');
+    const phoneInputs = document.querySelectorAll('#leadPhone, #masterLeadPhone');
 
     phoneInputs.forEach(input => {
         input.addEventListener('input', (e) => {
@@ -660,10 +634,6 @@ function validateMasterLeadForm(e) {
 // 12. УПРАВЛЕНИЕ МОДАЛЬНЫМИ ОКНАМИ
 // ============================================
 
-function openClientForm()      { _modal('clientFormModal',       'flex'); }
-function closeClientForm()     { _modal('clientFormModal',       'none'); }
-function openMasterForm()      { _modal('masterFormModal',        'flex'); }
-function closeMasterForm()     { _modal('masterFormModal',        'none'); }
 function openClientLeadForm()  { _modal('clientLeadFormModal',   'flex'); }
 function closeClientLeadForm() { _modal('clientLeadFormModal',   'none'); }
 function openThankYou()        { _modal('thankYouModal',          'flex'); }
