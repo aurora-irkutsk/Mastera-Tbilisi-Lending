@@ -1962,7 +1962,7 @@ footer {
 .lang-btn.active {
     background: linear-gradient(135deg, var(--construction-yellow), var(--construction-orange));
     color: var(--dark-concrete);
-    border: 2px solid transparent;
+    border: none;
     outline: none;
     box-shadow: 0 4px 15px rgba(253, 185, 19, 0.4);
 }
@@ -2400,12 +2400,12 @@ footer {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
-    animation: spin-button 9s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+    animation: bounce-vertical 3s ease-in-out infinite;
 }
 
 .scroll-to-top.whatsapp-fab {
-    width: 65px;
-    height: 65px;
+    width: 70px;
+    height: 70px;
     overflow: hidden;
     display: flex;
     align-items: center;
