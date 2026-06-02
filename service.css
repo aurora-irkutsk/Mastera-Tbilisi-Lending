@@ -66,8 +66,15 @@
 /* Прайс-таблица */
 .price-table {
     max-width: 700px;
-    margin: 0 auto 3rem;
-    padding: 0 1.5rem;
+    margin: 3rem auto 3rem;
+    padding: 1.5rem; 
+    position: relative;
+    z-index: 1;
+    border-radius: 8px;
+    border: 1px solid #FDB913;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .price-table h2 {
@@ -104,6 +111,15 @@
     font-weight: 700;
     white-space: nowrap;
     margin-left: 1rem;
+}
+
+ @media (max-width: 768px) {
+  .price-table {
+    margin: 0 4% 3rem;
+    padding: 1.5rem 4%;
+    margin: 3rem 4% 3rem;
+    padding: 1.5rem 4%;
+  }
 }
 
 /* Районы */
