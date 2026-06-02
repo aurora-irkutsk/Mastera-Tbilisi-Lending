@@ -131,7 +131,7 @@
     background: rgba(0, 0, 0, 0.35);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(253, 185, 19, 0.3);
+    border: 1px solid #FDB913;
     border-radius: 12px;
     position: relative;
     z-index: 1;

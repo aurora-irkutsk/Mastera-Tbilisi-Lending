@@ -437,7 +437,7 @@ header {
     font-weight: 900;
     text-align: center;
     margin-bottom: 0.5rem;
-    color: var(--construction-yellow);
+    color: #d0d0d0;
 }
 
 .services-subtitle {
@@ -445,7 +445,7 @@ header {
     font-size: clamp(0.9rem, 1.2vw, 1.1rem);
     font-weight: 500;
     text-align: center;
-    color: var(--safety-green);
+    color: #FDB913;
     margin-bottom: 2.5rem;
 }
 
