@@ -75,21 +75,21 @@ body {
     height: 100%;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.3;
+    opacity: 0.5;
     background-color: var(--dark-concrete);
     background-image:
         /* Hex dot layer 1 */
         radial-gradient(circle at 50% 50%, transparent 1.2px, var(--dark-concrete) 0 2px, transparent 2px),
         /* Hex dot layer 2 (offset for hexagonal grid) */
         radial-gradient(circle at 50% 50%, transparent 1.2px, var(--dark-concrete) 0 2px, transparent 2px),
-        /* Red blob */
-        radial-gradient(circle at 50% 50%, #f00, transparent 60%),
-        /* Yellow blob */
-        radial-gradient(circle at 50% 50%, #ff0, transparent 60%),
-        /* Green blob */
-        radial-gradient(circle at 50% 50%, #0f0, transparent 60%),
-        /* Blue blob — ellipse with pixel-based Y size */
-        radial-gradient(ellipse at 50% 50%, #00f, transparent 60%);
+        /* Pink blob */
+        radial-gradient(circle at 50% 50%, #fb0094, transparent 60%),
+        /* Orange blob */
+        radial-gradient(circle at 50% 50%, #ff8800, transparent 60%),
+        /* Cyan blob */
+        radial-gradient(circle at 50% 50%, #00ffff, transparent 60%),
+        /* Purple blob — ellipse with pixel-based Y size */
+        radial-gradient(ellipse at 50% 50%, #8800ff, transparent 60%);
     background-size:
         4px 6.93px,
         4px 6.93px,
