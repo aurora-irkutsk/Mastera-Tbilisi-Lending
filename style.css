@@ -342,7 +342,7 @@ header {
     animation: slideUp 0.8s ease-out 0.2s backwards;
     font-weight: 800;
     color: #d0d0d0;
-    min-height: 1.2em;
+    min-height: 2.6em;
 }
 
 /* Курсор для эффекта печатной машинки */
