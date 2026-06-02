@@ -137,6 +137,8 @@
     -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(253, 185, 19, 0.3);
     border-radius: 12px;
+    position: relative;
+    z-index: 1;
 }
 
 .districts h2 {
@@ -145,8 +147,6 @@
     font-weight: 700;
     color: var(--construction-yellow);
     margin-bottom: 0.3rem;
-    position: relative;
-    z-index: 1;
 }
 
 /* ============================================
