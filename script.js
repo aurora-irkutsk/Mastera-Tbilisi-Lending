@@ -478,6 +478,7 @@ function initClientLeadFormTracking() {
         isSubmitting = true;
 
         const formData = new FormData(leadForm);
+        const transactionId = 'client_' + Date.now();
 
         try {
             const response = await fetch('https://formspree.io/f/xpqjbpyk', {
@@ -492,9 +493,9 @@ function initClientLeadFormTracking() {
             if (typeof gtag === 'function') {
                 gtag('event', 'generate_lead_client', {
                     form_name: 'client_lead_form',
-                    form_location: 'Как найти мастера',
+                    form_location: 'Заявка клиента',
                     user_type: 'client',
-                    value: 0,
+                    value: 1,
                     currency: 'USD'
                 });
             }
@@ -572,12 +573,13 @@ function initMasterLeadFormTracking() {
             const data = await response.json();
             if (!response.ok) throw new Error(data.error || 'Submit failed');
 
-            if (typeof gtag === 'function') {
+            if (typeof gtag === 'function') {          
                 gtag('event', 'generate_lead_master', {
                     form_name: 'master_lead_form',
-                    form_location: 'Как начать получать заказы',
+                    form_location: 'Регистрация мастера',
                     user_type: 'master',
-                    method: 'form'
+                    value: 0,
+                    currency: 'USD'
                 });
             }
 
