@@ -1657,8 +1657,8 @@ footer {
     .audience-link {
         flex: 1 1 100%;
         justify-content: center;
-        padding: 0.5rem 1.2rem;
-        font-size: 0.85rem;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
     }
     
     .online-indicator::before,
