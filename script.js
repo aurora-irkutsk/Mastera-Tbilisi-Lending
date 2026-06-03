@@ -497,11 +497,11 @@ function initClientLeadFormTracking() {
                     currency: 'USD',
                     transaction_id: transactionId
                 });
-                gtag('event', 'generate_lead', {
+                gtag('event', 'generate_lead_client', {
                     form_name: 'client_lead_form',
                     form_location: 'Как найти мастера',
                     user_type: 'client',
-                    value: 1.2,
+                    value: 0,
                     currency: 'USD'
                 });
             }
@@ -580,14 +580,12 @@ function initMasterLeadFormTracking() {
             if (!response.ok) throw new Error(data.error || 'Submit failed');
 
             if (typeof gtag === 'function') {
-                gtag('event', 'generate_lead', {
+                gtag('event', 'generate_lead_master', {
                     form_name: 'master_lead_form',
                     form_location: 'Как начать получать заказы',
                     user_type: 'master',
-                    value: 0,
-                    currency: 'USD'
+                    method: 'form'
                 });
-                gtag('event', 'master_lead_submit', { method: 'form' });
             }
 
             closeMasterLeadForm();
