@@ -464,9 +464,9 @@ function validateForm(e) {
 // 10. ЛИД-ФОРМА КЛИЕНТА
 // ============================================
 
-// URL прокси-воркера (Cloudflare Worker), который добавляет секрет и пересылает в бота.
-// ⚠️ Сюда НЕ вставляйте WEBHOOK_SECRET — он живёт только внутри воркера.
-const BOT_PROXY_URL = 'https://REPLACE-WITH-YOUR-WORKER.workers.dev';
+// Адрес эндпоинта бота для приёма заявок с сайта (напрямую, без секрета).
+// Защита от спама на стороне бота: проверка домена-источника + honeypot.
+const BOT_REQUEST_URL = 'https://mastera-tbilisi-mastera-tbilisi.up.railway.app/site/new-request';
 
 // Район на сайте выбирается слугами (Vake, Saburtalo...), а бот ждёт названия по-русски.
 const BOT_DISTRICT_MAP = {
@@ -503,10 +503,11 @@ function sendLeadToBot(formData) {
             category:    get('service') || 'Другое',
             description: descParts.join('\n'),              // имя + задача → видно в превью
             address:     'Не указан',                       // в форме нет адреса
-            contact:     contactParts.join(', ') || 'Нет контакта' // скрыто до оплаты
+            contact:     contactParts.join(', ') || 'Нет контакта', // скрыто до оплаты
+            honeypot:    get('_gotcha')                     // антиспам: люди это поле не заполняют
         };
 
-        fetch(BOT_PROXY_URL, {
+        fetch(BOT_REQUEST_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
