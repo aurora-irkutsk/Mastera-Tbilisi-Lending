@@ -2457,6 +2457,11 @@ footer {
     cursor: pointer;
 }
 
+/* Убираем радужное кольцо (наследуется от .whatsapp-fab) вокруг главной кнопки-чата. */
+.scroll-to-top.contact-fab::before {
+    display: none;
+}
+
 .scroll-to-top.contact-fab .contact-fab-icon {
     width: 44px;
     height: 44px;
@@ -2501,17 +2506,26 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fff;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     -webkit-tap-highlight-color: transparent;
 }
+
+/* Фон под цвет бренда — страховка, чтобы из-под иконки не выглядывал белый круг,
+   если у исходной картинки есть поля вокруг логотипа. */
+.contact-opt--wa { background: #25d366; }   /* WhatsApp зелёный */
+.contact-opt--tg { background: #29a8e0; }   /* Telegram голубой */
 
 .contact-opt img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
+
+/* У исходников логотип занимает не весь кадр (вокруг поля): масштабируем так,
+   чтобы цветной круг заполнял контейнер до краёв, лишнее обрезает overflow:hidden. */
+.contact-opt--wa img { transform: scale(2.15); }   /* зелёный круг ~45% кадра */
+.contact-opt--tg img { transform: scale(1.32); }   /* голубой круг ~76% кадра */
 
 .contact-opt:hover {
     transform: scale(1.08);
