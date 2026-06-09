@@ -2457,11 +2457,6 @@ footer {
     cursor: pointer;
 }
 
-/* Убираем радужное кольцо (наследуется от .whatsapp-fab) вокруг главной кнопки-чата. */
-.scroll-to-top.contact-fab::before {
-    display: none;
-}
-
 .scroll-to-top.contact-fab .contact-fab-icon {
     width: 44px;
     height: 44px;
