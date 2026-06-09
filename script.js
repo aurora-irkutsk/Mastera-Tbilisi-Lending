@@ -865,11 +865,13 @@ function initScrollToTop() {
 // ============================================
 
 function initWhatsAppButtonTracking() {
-    const whatsappButton = document.getElementById('scrollToTop');
-    if (!whatsappButton) return;
+    const fab = document.getElementById('scrollToTop');
+    if (!fab) return;
 
-    // Тексты сообщений для WhatsApp
     const isMastersPage = window.location.pathname.includes('/masters/');
+    const lang = window.__FORCE_LANG__ || 'ru';
+
+    // Предзаполненный текст для WhatsApp по языку страницы.
     const waTexts = {
         ru: encodeURIComponent(isMastersPage
             ? 'Здравствуйте! Хочу стать партнёром сервиса.'
@@ -881,39 +883,89 @@ function initWhatsAppButtonTracking() {
             ? 'Hello! I want to become a partner.'
             : 'Hello! I need a handyman in Tbilisi.')
     };
-    const lang = window.__FORCE_LANG__ || 'ru';
-    const waText = waTexts[lang] || waTexts.ru;
-    whatsappButton.href = 'https://wa.me/995557645196?text=' + waText;
+    const waHref = 'https://wa.me/995557645196?text=' + (waTexts[lang] || waTexts.ru);
 
-    let isButtonClicked = false;
+    // Клиентский Telegram-бот по языку страницы (RU/EN/GE). start=site_<lang> — для атрибуции.
+    const tgBots = { ru: 'mastera_tbilisi_bot', en: 'mastera_en_bot', ka: 'mastera_ka_bot' };
+    const tgHref = 'https://t.me/' + (tgBots[lang] || tgBots.ru) + '?start=site_' + lang;
 
-    whatsappButton.addEventListener('click', function (e) {
-        // Защита от повторных кликов
-        if (isButtonClicked) return;
-        isButtonClicked = true;
-        
-        // Предотвращаем стандартный переход, чтобы сначала отправить событие в аналитику
+    // Подписи (доступность/тултипы) по языку.
+    const labels = ({
+        ru: { open: 'Связаться с нами', wa: 'Написать в WhatsApp', tg: 'Написать в Telegram' },
+        en: { open: 'Contact us',       wa: 'Message on WhatsApp', tg: 'Message on Telegram' },
+        ka: { open: 'დაგვიკავშირდით',   wa: 'მოგვწერეთ WhatsApp-ში', tg: 'მოგვწერეთ Telegram-ში' }
+    })[lang] || { open: 'Связаться с нами', wa: 'WhatsApp', tg: 'Telegram' };
+
+    // FAB больше не прямая ссылка, а переключатель меню с нейтральной «чат»-иконкой.
+    fab.removeAttribute('href');
+    fab.removeAttribute('target');
+    fab.classList.add('contact-fab');
+    fab.setAttribute('role', 'button');
+    fab.setAttribute('tabindex', '0');
+    fab.setAttribute('aria-label', labels.open);
+    fab.setAttribute('aria-expanded', 'false');
+    fab.innerHTML =
+        '<svg class="contact-fab-icon" viewBox="0 0 24 24" aria-hidden="true">' +
+        '<path d="M12 3C6.48 3 2 6.94 2 11.5c0 2.3 1.14 4.37 2.98 5.86-.13 1.02-.5 2.36-1.32 3.4-.18.23-.02.57.27.53 1.86-.27 3.3-.97 4.27-1.6 1.16.34 2.42.51 3.8.51 5.52 0 10-3.94 10-8.5S17.52 3 12 3z"/>' +
+        '</svg>';
+
+    // Две опции живут отдельным контейнером у <body> — у FAB overflow:hidden, иначе их обрежет.
+    const menu = document.createElement('div');
+    menu.className = 'contact-fab-menu';
+    menu.innerHTML =
+        '<a class="contact-opt contact-opt--tg" href="' + tgHref + '" target="_blank" rel="noopener" ' +
+        'aria-label="' + labels.tg + '" title="' + labels.tg + '">' +
+        '<img src="/image/telegram-icon.png" alt="Telegram" loading="lazy"></a>' +
+        '<a class="contact-opt contact-opt--wa" href="' + waHref + '" target="_blank" rel="noopener" ' +
+        'aria-label="' + labels.wa + '" title="' + labels.wa + '">' +
+        '<img src="/image/whatsapp-icon.jpg" alt="WhatsApp" loading="lazy"></a>';
+    document.body.appendChild(menu);
+
+    let isOpen = false;
+    const setOpen = (v) => {
+        isOpen = v;
+        fab.classList.toggle('open', v);
+        menu.classList.toggle('open', v);
+        fab.setAttribute('aria-expanded', String(v));
+    };
+
+    // Открытие/закрытие меню по клику на FAB (+ событие аналитики при открытии).
+    fab.addEventListener('click', function (e) {
         e.preventDefault();
-
-        const goToWhatsApp = () => { 
-            window.location.href = whatsappButton.href; 
-        };
-
-        // Если Google Analytics (gtag) подключён — отправляем событие
-        if (typeof gtag === 'function') {
-            gtag('event', 'whatsapp_click', {
-                event_category: 'engagement',
-                event_label: 'whatsapp_fab',  // можно добавить метку для отчётов
-                method: 'whatsapp'            // параметр для сравнения с другими каналами
-            });
-            
-            // Небольшая задержка, чтобы событие успело отправиться перед переходом
-            setTimeout(goToWhatsApp, 600);
-        } else {
-            // Если аналитики нет — переходим сразу
-            goToWhatsApp();
+        setOpen(!isOpen);
+        if (isOpen && typeof gtag === 'function') {
+            gtag('event', 'contact_open', { event_category: 'engagement', event_label: 'contact_fab' });
         }
     });
+    // Клавиатурная доступность: Enter/Space открывает, Esc закрывает.
+    fab.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fab.click(); }
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+    // Закрытие по клику вне меню и при прокрутке к верху (FAB скрывается).
+    document.addEventListener('click', function (e) {
+        if (isOpen && !menu.contains(e.target) && !fab.contains(e.target)) setOpen(false);
+    });
+    window.addEventListener('scroll', function () { if (window.pageYOffset <= 300) setOpen(false); });
+
+    // Клик по опции: при наличии gtag шлём событие и открываем канал с небольшой задержкой.
+    const bindOption = (selector, method, href) => {
+        const el = menu.querySelector(selector);
+        if (!el) return;
+        el.addEventListener('click', function (e) {
+            setOpen(false);
+            if (typeof gtag !== 'function') return; // нет аналитики — обычный переход по ссылке
+            e.preventDefault();
+            gtag('event', method + '_click', {
+                event_category: 'engagement',
+                event_label: method + '_fab',
+                method: method
+            });
+            setTimeout(function () { window.open(href, '_blank', 'noopener'); }, 300);
+        });
+    };
+    bindOption('.contact-opt--wa', 'whatsapp', waHref);
+    bindOption('.contact-opt--tg', 'telegram', tgHref);
 }
 
 // ============================================

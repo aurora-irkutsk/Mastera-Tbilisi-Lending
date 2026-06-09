@@ -2447,6 +2447,94 @@ footer {
     transform: scale(0.95);
 }
 
+/* ============================================
+   КОНТАКТНЫЙ FAB: нейтральная «чат»-иконка + меню WhatsApp/Telegram
+   ============================================ */
+/* Нейтральная заливка FAB, когда он стал переключателем меню (внутри — chat SVG).
+   Радужное кольцо (::before) и размеры наследуются от .whatsapp-fab. */
+.scroll-to-top.contact-fab {
+    background: linear-gradient(135deg, #5b6bf0, #3a4de0);
+    cursor: pointer;
+}
+
+.scroll-to-top.contact-fab .contact-fab-icon {
+    width: 44px;
+    height: 44px;
+    fill: #fff;
+    transform: none;
+    transition: transform 0.25s ease;
+}
+
+/* В открытом состоянии слегка поворачиваем иконку — визуальная обратная связь. */
+.scroll-to-top.contact-fab.open .contact-fab-icon {
+    transform: rotate(8deg) scale(0.92);
+}
+
+/* Контейнер с двумя опциями — над FAB, отдельно от него (у FAB overflow:hidden). */
+.contact-fab-menu {
+    position: fixed;
+    right: 45px;          /* центрируем 56px-опции под центром 80px-FAB (right:30 + (80-56)/2 - 3) */
+    bottom: 120px;        /* над FAB: 30 (bottom) + 80 (высота) + 10 (зазор) */
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+}
+
+.contact-fab-menu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.contact-opt {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.contact-opt img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.contact-opt:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+.contact-opt:active {
+    transform: scale(0.95);
+}
+
+/* Лёгкое каскадное появление: Telegram чуть раньше, WhatsApp следом. */
+.contact-fab-menu.open .contact-opt--tg { transition-delay: 0.04s; }
+.contact-fab-menu.open .contact-opt--wa { transition-delay: 0.10s; }
+
+@media (max-width: 768px) {
+    .contact-fab-menu { right: 35px; bottom: 110px; }  /* FAB на мобильных: bottom 20 + 80 + 10 */
+}
+
+@media (max-width: 480px) {
+    .contact-fab-menu { right: 30px; bottom: 105px; }  /* FAB: bottom 15 + 80 + 10 */
+    .contact-opt { width: 52px; height: 52px; }
+}
+
 /* Анимация подёргивания вверх-вниз */
 @keyframes bounce-vertical {
     0%, 100% {
