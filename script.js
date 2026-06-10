@@ -1105,7 +1105,7 @@ function initWhatsAppButtonTracking() {
     // за бликом. Стартует с WhatsApp (передний слой — is-front).
     fab.innerHTML =
         '<span class="cf-morph">' +
-            '<span class="cf-layer cf-layer--wa is-front" aria-hidden="true"><img src="/image/whatsapp-icon.jpg" alt=""></span>' +
+            '<span class="cf-layer cf-layer--wa is-front" aria-hidden="true"><img src="/image/whatsapp-icon.png" alt=""></span>' +
             '<span class="cf-layer cf-layer--tg" aria-hidden="true"><img src="/image/telegram-icon.png" alt=""></span>' +
             '<span class="cf-shine" aria-hidden="true"></span>' +
         '</span>';
@@ -1119,7 +1119,7 @@ function initWhatsAppButtonTracking() {
         '<img src="/image/telegram-icon.png" alt="Telegram" loading="lazy"></a>' +
         '<a class="contact-opt contact-opt--wa" href="' + waHref + '" target="_blank" rel="noopener" ' +
         'aria-label="' + labels.wa + '" title="' + labels.wa + '">' +
-        '<img src="/image/whatsapp-icon.jpg" alt="WhatsApp" loading="lazy"></a>';
+        '<img src="/image/whatsapp-icon.png" alt="WhatsApp" loading="lazy"></a>';
     document.body.appendChild(menu);
 
     // Ротация слоёв FAB. Уважаем prefers-reduced-motion: при нём иконка не мигает.

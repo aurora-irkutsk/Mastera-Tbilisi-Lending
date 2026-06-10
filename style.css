@@ -2453,7 +2453,6 @@ footer {
 /* Нейтральная заливка FAB, когда он стал переключателем меню (внутри — chat SVG).
    Радужное кольцо (::before) и размеры наследуются от .whatsapp-fab. */
 .scroll-to-top.contact-fab {
-    background: linear-gradient(135deg, #5b6bf0, #3a4de0);
     cursor: pointer;
 }
 
@@ -2508,13 +2507,12 @@ footer {
     object-fit: cover;
 }
 
-/* Вписываем логотипы в круг тем же масштабом, что и в меню (вокруг них поля).
-   Фон под слоем — чтобы во время прокраски не мелькали поля картинок
-   (особенно белый фон у whatsapp-icon.jpg). */
+/* Вписываем логотипы в круг тем же масштабом, что и в меню (вокруг них прозрачные
+   поля). Фон под слоем — чтобы в углах не просвечивало: tg голубой, wa зелёный. */
 .scroll-to-top.contact-fab .cf-layer--tg { background: #29a8e0; }
 .scroll-to-top.contact-fab .cf-layer--tg img { transform: scale(1.32); }
 .scroll-to-top.contact-fab .cf-layer--wa { background: #25d366; }
-.scroll-to-top.contact-fab .cf-layer--wa img { transform: scale(2.15); }
+.scroll-to-top.contact-fab .cf-layer--wa img { transform: scale(1.7); }
 
 /* Блик: мягкая световая полоса. Центр блика совпадает с линией прокраски
    пиксель-в-пиксель — не опережает её. Для этого:
@@ -2610,7 +2608,7 @@ footer {
 
 /* У исходников логотип занимает не весь кадр (вокруг поля): масштабируем так,
    чтобы цветной круг заполнял контейнер до краёв, лишнее обрезает overflow:hidden. */
-.contact-opt--wa img { transform: scale(2.15); }   /* зелёный круг ~45% кадра */
+.contact-opt--wa img { transform: scale(1.7); }    /* зелёный круг ~60% кадра */
 .contact-opt--tg img { transform: scale(1.32); }   /* голубой круг ~76% кадра */
 
 .contact-opt:hover {
