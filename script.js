@@ -1100,10 +1100,15 @@ function initWhatsAppButtonTracking() {
     fab.setAttribute('tabindex', '0');
     fab.setAttribute('aria-label', labels.open);
     fab.setAttribute('aria-expanded', 'false');
+    // FAB морфит иконку между двумя логотипами (WhatsApp ↔ Telegram). Смена —
+    // плавный «wipe»: новый слой прокрашивается по диагонали слева направо вслед
+    // за бликом. Стартует с WhatsApp (передний слой — is-front).
     fab.innerHTML =
-        '<svg class="contact-fab-icon" viewBox="0 0 24 24" aria-hidden="true">' +
-        '<path d="M12 3C6.48 3 2 6.94 2 11.5c0 2.3 1.14 4.37 2.98 5.86-.13 1.02-.5 2.36-1.32 3.4-.18.23-.02.57.27.53 1.86-.27 3.3-.97 4.27-1.6 1.16.34 2.42.51 3.8.51 5.52 0 10-3.94 10-8.5S17.52 3 12 3z"/>' +
-        '</svg>';
+        '<span class="cf-morph">' +
+            '<span class="cf-layer cf-layer--wa is-front" aria-hidden="true"><img src="/image/whatsapp-icon.jpg" alt=""></span>' +
+            '<span class="cf-layer cf-layer--tg" aria-hidden="true"><img src="/image/telegram-icon.png" alt=""></span>' +
+            '<span class="cf-shine" aria-hidden="true"></span>' +
+        '</span>';
 
     // Две опции живут отдельным контейнером у <body> — у FAB overflow:hidden, иначе их обрежет.
     const menu = document.createElement('div');
@@ -1117,12 +1122,35 @@ function initWhatsAppButtonTracking() {
         '<img src="/image/whatsapp-icon.jpg" alt="WhatsApp" loading="lazy"></a>';
     document.body.appendChild(menu);
 
+    // Ротация слоёв FAB. Уважаем prefers-reduced-motion: при нём иконка не мигает.
+    const cfLayers = Array.from(fab.querySelectorAll('.cf-layer'));
+    const cfShine = fab.querySelector('.cf-shine');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let cfIndex = 0;
+    let cfTimer = null;
+    // Перезапуск CSS-анимации: снять класс, форсировать reflow, навесить снова.
+    const cfRestart = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
+    const cfMorph = () => {
+        const next = (cfIndex + 1) % cfLayers.length;
+        cfLayers[cfIndex].classList.remove('is-front');
+        cfLayers[next].classList.add('is-front');
+        // Блик и прокраска — на одном таймере, поэтому всегда совпадают.
+        cfRestart(cfShine, 'go');
+        cfRestart(cfLayers[next], 'cf-wipe');
+        cfIndex = next;
+    };
+    const cfStart = () => { if (!reduceMotion && !cfTimer && cfLayers.length > 1) cfTimer = setInterval(cfMorph, 3200); };
+    const cfStop = () => { if (cfTimer) { clearInterval(cfTimer); cfTimer = null; } };
+    cfStart();
+
     let isOpen = false;
     const setOpen = (v) => {
         isOpen = v;
         fab.classList.toggle('open', v);
         menu.classList.toggle('open', v);
         fab.setAttribute('aria-expanded', String(v));
+        // Пока меню открыто — иконка стабильна; закрыли — снова играет.
+        if (v) cfStop(); else cfStart();
     };
 
     // Открытие/закрытие меню по клику на FAB (+ событие аналитики при открытии).

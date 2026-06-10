@@ -2401,8 +2401,8 @@ footer {
 }
 
 .scroll-to-top.whatsapp-fab {
-    width: 80px;
-    height: 80px;
+    width: 65px;
+    height: 65px;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -2457,17 +2457,108 @@ footer {
     cursor: pointer;
 }
 
-.scroll-to-top.contact-fab .contact-fab-icon {
-    width: 44px;
-    height: 44px;
-    fill: #fff;
-    transform: none;
-    transition: transform 0.25s ease;
+/* Радужное вращающееся кольцо (от .whatsapp-fab) убрано — FAB теперь
+   морфит иконку (чат → Telegram → WhatsApp) и по нему пробегает блик. */
+.scroll-to-top.contact-fab::before {
+    content: none;
 }
 
-/* В открытом состоянии слегка поворачиваем иконку — визуальная обратная связь. */
-.scroll-to-top.contact-fab.open .contact-fab-icon {
-    transform: rotate(8deg) scale(0.92);
+/* Контейнер слоёв: круг с обрезкой — логотипы и блик не вылезают за края. */
+.scroll-to-top.contact-fab .cf-morph {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+/* Слои-кадры лежат друг на друге, оба непрозрачны. Видимость решает z-index:
+   передний (is-front) перекрывает задний. Смена — плавный «wipe»: новый слой
+   проявляется по диагональной линии слева направо, вслед за бликом. */
+.scroll-to-top.contact-fab .cf-layer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    clip-path: circle(75% at 50% 50%);   /* полностью раскрыт */
+    pointer-events: none;
+}
+
+.scroll-to-top.contact-fab .cf-layer.is-front {
+    z-index: 2;
+}
+
+/* «Wipe»: новый передний слой прокрашивается по диагональной линии слева
+   направо. Линия наклонена так же, как блик (skewX), и блик идёт чуть впереди —
+   получается «свет прошёл → за ним проявился новый логотип». forwards держит
+   полностью раскрытое состояние, пока слой остаётся передним. */
+.scroll-to-top.contact-fab .cf-layer.cf-wipe {
+    animation: cf-wipe-in 1.3s linear forwards;
+}
+
+@keyframes cf-wipe-in {
+    0%   { clip-path: polygon(-40% 0%, -15% 0%, -40% 100%, -40% 100%); }
+    100% { clip-path: polygon(-40% 0%, 140% 0%, 115% 100%, -40% 100%); }
+}
+
+.scroll-to-top.contact-fab .cf-layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Вписываем логотипы в круг тем же масштабом, что и в меню (вокруг них поля).
+   Фон под слоем — чтобы во время прокраски не мелькали поля картинок
+   (особенно белый фон у whatsapp-icon.jpg). */
+.scroll-to-top.contact-fab .cf-layer--tg { background: #29a8e0; }
+.scroll-to-top.contact-fab .cf-layer--tg img { transform: scale(1.32); }
+.scroll-to-top.contact-fab .cf-layer--wa { background: #25d366; }
+.scroll-to-top.contact-fab .cf-layer--wa img { transform: scale(2.15); }
+
+/* Блик: мягкая световая полоса. Центр блика совпадает с линией прокраски
+   пиксель-в-пиксель — не опережает её. Для этого:
+   • оба — linear (равномерно): тогда clip-path и left идут синхронно. При
+     cubic-bezier они расходятся (clip-path и left по-разному реагируют на
+     покадровый easing), а на linear совпадают пиксель-в-пиксель;
+   • центр блика = середина границы wipe (от -27.5% до 127.5%) минус половина
+     ширины (24%) → диапазон left -51.5% … 103.5%. Проценты left и проценты
+     clip-path считаются от одного блока (cf-morph), поэтому совпадают напрямую;
+   • наклон skewX(-14deg) совпадает с наклоном линии wipe (≈14°: слант 25%
+     ширины на 100% высоты). skewX крутит вокруг центра — центр не уезжает;
+   • keyframes — два кадра (0%/100%), как у wipe. Затухание не нужно: вне круга
+     блик обрезается круглым overflow:hidden. */
+.scroll-to-top.contact-fab .cf-shine {
+    position: absolute;
+    top: -15%;
+    left: -51.5%;
+    width: 48%;
+    height: 130%;
+    background: linear-gradient(100deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.793) 50%,
+        rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-14deg);
+    filter: blur(1px);
+    z-index: 4;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.scroll-to-top.contact-fab .cf-shine.go {
+    opacity: 1;
+    animation: cf-shine-sweep 1.3s linear;
+}
+
+@keyframes cf-shine-sweep {
+    0%   { left: -51.5%; }
+    100% { left: 103.5%; }
+}
+
+/* Доступность: при «уменьшить движение» эффектов нет, картинка стабильна. */
+@media (prefers-reduced-motion: reduce) {
+    .scroll-to-top.contact-fab .cf-shine,
+    .scroll-to-top.contact-fab .cf-layer.cf-wipe { animation: none; }
 }
 
 /* Контейнер с двумя опциями — над FAB, отдельно от него (у FAB overflow:hidden). */
