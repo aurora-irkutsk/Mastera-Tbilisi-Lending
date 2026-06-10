@@ -1122,10 +1122,10 @@ function initWhatsAppButtonTracking() {
         '<img src="/image/whatsapp-icon.png" alt="WhatsApp" loading="lazy"></a>';
     document.body.appendChild(menu);
 
-    // Ротация слоёв FAB. Уважаем prefers-reduced-motion: при нём иконка не мигает.
+    // Ротация слоёв FAB: блик и смена иконки играют всегда, независимо от
+    // системной настройки prefers-reduced-motion.
     const cfLayers = Array.from(fab.querySelectorAll('.cf-layer'));
     const cfShine = fab.querySelector('.cf-shine');
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let cfIndex = 0;
     let cfTimer = null;
     // Перезапуск CSS-анимации: снять класс, форсировать reflow, навесить снова.
@@ -1135,11 +1135,12 @@ function initWhatsAppButtonTracking() {
         cfLayers[cfIndex].classList.remove('is-front');
         cfLayers[next].classList.add('is-front');
         // Блик и прокраска — на одном таймере, поэтому всегда совпадают.
+        // Играем всегда, независимо от prefers-reduced-motion.
         cfRestart(cfShine, 'go');
         cfRestart(cfLayers[next], 'cf-wipe');
         cfIndex = next;
     };
-    const cfStart = () => { if (!reduceMotion && !cfTimer && cfLayers.length > 1) cfTimer = setInterval(cfMorph, 3200); };
+    const cfStart = () => { if (!cfTimer && cfLayers.length > 1) cfTimer = setInterval(cfMorph, 3200); };
     const cfStop = () => { if (cfTimer) { clearInterval(cfTimer); cfTimer = null; } };
     cfStart();
 

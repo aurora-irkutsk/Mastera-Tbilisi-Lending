@@ -2553,12 +2553,6 @@ footer {
     100% { left: 103.5%; }
 }
 
-/* Доступность: при «уменьшить движение» эффектов нет, картинка стабильна. */
-@media (prefers-reduced-motion: reduce) {
-    .scroll-to-top.contact-fab .cf-shine,
-    .scroll-to-top.contact-fab .cf-layer.cf-wipe { animation: none; }
-}
-
 /* Контейнер с двумя опциями — над FAB, отдельно от него (у FAB overflow:hidden). */
 .contact-fab-menu {
     position: fixed;
