@@ -15,6 +15,13 @@ const i18n = {
         contactRequired:     'Пожалуйста, заполните хотя бы один из контактов: Telegram или WhatsApp',
         submitError:         'Ошибка при отправке. Попробуйте ещё раз.',
         subdistrictRequired: 'Пожалуйста, выберите подрайон',
+        photoLabel:          '📷 Фото проблемы (по желанию, до 3)',
+        photoAdd:            'Прикрепить фото',
+        photoTooMany:        'Можно прикрепить не более 3 фото',
+        photoBadType:        'Можно прикреплять только изображения',
+        photoTooBig:         'Файл слишком большой (до 10 МБ)',
+        photoRemove:         'Удалить',
+        masterFinishTelegram:'✅ Завершить регистрацию в Telegram',
     },
     ka: {
         phoneInvalid:        'გთხოვთ, შეიყვანოთ სწორი ქართული ტელეფონის ნომერი ფორმატში: +995XXXXXXXXX (9 ციფრი +995-ის შემდეგ)',
@@ -23,6 +30,13 @@ const i18n = {
         contactRequired:     'გთხოვთ, შეავსოთ ერთ-ერთი საკონტაქტო ველი: Telegram ან WhatsApp',
         submitError:         'გაგზავნისას მოხდა შეცდომა. სცადეთ კიდევ ერთხელ.',
         subdistrictRequired: 'გთხოვთ, აირჩიოთ უბანი',
+        photoLabel:          '📷 პრობლემის ფოტო (სურვილისამებრ, 3-მდე)',
+        photoAdd:            'ფოტოს მიმაგრება',
+        photoTooMany:        'შეგიძლიათ მიამაგროთ მაქსიმუმ 3 ფოტო',
+        photoBadType:        'შესაძლებელია მხოლოდ სურათების მიმაგრება',
+        photoTooBig:         'ფაილი ძალიან დიდია (10 მბ-მდე)',
+        photoRemove:         'წაშლა',
+        masterFinishTelegram:'✅ რეგისტრაციის დასრულება Telegram-ში',
     },
     en: {
         phoneInvalid:        'Please enter a valid Georgian phone number in the format: +995XXXXXXXXX (9 digits after +995)',
@@ -31,8 +45,18 @@ const i18n = {
         contactRequired:     'Please fill in at least one contact field: Telegram or WhatsApp',
         submitError:         'An error occurred while submitting. Please try again.',
         subdistrictRequired: 'Please select a subdistrict',
+        photoLabel:          '📷 Photo of the problem (optional, up to 3)',
+        photoAdd:            'Attach photo',
+        photoTooMany:        'You can attach up to 3 photos',
+        photoBadType:        'Only images can be attached',
+        photoTooBig:         'File is too large (up to 10 MB)',
+        photoRemove:         'Remove',
+        masterFinishTelegram:'✅ Finish registration in Telegram',
     }
 };
+
+// Публичный username бота мастеров — для диплинка «завершить регистрацию».
+const MASTER_BOT_DEEPLINK = 'https://t.me/mastera_tbilisi_bot?start=master';
 
 // Глобальная переменная текущего языка
 // window.__FORCE_LANG__ устанавливается в языковых подстраницах (/ru/, /ge/, /en/)
@@ -59,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initModalForms();
     initScrollToTop();
     initClientLeadFormTracking();
+    initClientPhotoUpload();
     initDistrictCascade();
     initMasterLeadFormTracking();
     initWhatsAppButtonTracking();
@@ -471,6 +496,8 @@ function validateForm(e) {
 // Адрес эндпоинта бота для приёма заявок с сайта (напрямую, без секрета).
 // Защита от спама на стороне бота: проверка домена-источника + honeypot.
 const BOT_REQUEST_URL = 'https://mastera-tbilisi-mastera-tbilisi.up.railway.app/site/new-request';
+// Эндпоинт бота для анкет мастеров с сайта (уведомление админу-лид).
+const BOT_MASTER_URL  = 'https://mastera-tbilisi-mastera-tbilisi.up.railway.app/site/new-master';
 
 // Район на сайте выбирается слугами (Vake, Saburtalo...), а бот ждёт названия по-русски.
 const BOT_DISTRICT_MAP = {
@@ -508,18 +535,179 @@ function sendLeadToBot(formData) {
             description: descParts.join('\n'),              // имя + задача → видно в превью
             address:     'Не указан',                       // в форме нет адреса
             contact:     contactParts.join('\n') || 'Нет контакта', // скрыто до оплаты
-            honeypot:    get('_gotcha')                     // антиспам: люди это поле не заполняют
+            honeypot:    get('_gotcha'),                    // антиспам: люди это поле не заполняют
+            lang:        ['ru', 'en', 'ka'].includes(currentLang) ? currentLang : 'ru',
+            photos:      leadPhotoDataUrls.slice(0, MAX_LEAD_PHOTOS) // сжатые фото (base64), до 3
         };
 
+        // keepalive имеет лимит тела ~64 КБ — при наличии фото его НЕ используем
+        // (заявку всё равно держит открытая модалка благодарности, навигации нет).
+        const hasPhotos = payload.photos.length > 0;
         fetch(BOT_REQUEST_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
-            keepalive: true
+            keepalive: !hasPhotos
         }).catch(() => {}); // молча игнорируем — на email заявка всё равно уходит
     } catch (e) {
         console.error('sendLeadToBot error:', e);
     }
+}
+
+// ============================================
+// 10.0 ФОТО ПРОБЛЕМЫ В КЛИЕНТСКОЙ ФОРМЕ (до 3, по желанию)
+// ============================================
+
+const MAX_LEAD_PHOTOS = 3;          // максимум фото на заявку
+const LEAD_PHOTO_MAX_BYTES = 10 * 1024 * 1024;  // ограничение на исходный файл (10 МБ)
+let leadPhotoDataUrls = [];          // сжатые dataURL для отправки в бота
+
+// Сжимает изображение через <canvas> до ~1280px по длинной стороне (JPEG ~0.7).
+// Возвращает Promise<dataURL>. На ошибке — отклоняется.
+function compressImage(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('read error'));
+        reader.onload = () => {
+            const img = new Image();
+            img.onerror = () => reject(new Error('decode error'));
+            img.onload = () => {
+                const MAX = 1280;
+                let { width, height } = img;
+                if (width > MAX || height > MAX) {
+                    const k = Math.min(MAX / width, MAX / height);
+                    width = Math.round(width * k);
+                    height = Math.round(height * k);
+                }
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                resolve(canvas.toDataURL('image/jpeg', 0.7));
+            };
+            img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+// Инжектит блок загрузки фото в clientLeadForm (как initDistrictCascade — без правки 15 HTML).
+function initClientPhotoUpload() {
+    const form = document.getElementById('clientLeadForm');
+    if (!form) return;
+    if (form.querySelector('.lead-photo-wrap')) return; // уже добавлено
+
+    const wrap = document.createElement('div');
+    wrap.className = 'lead-photo-wrap';
+
+    const label = document.createElement('label');
+    label.className = 'lead-photo-label';
+    label.textContent = t('photoLabel');
+
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.name = 'photo';            // попадёт в FormData → Formspree приложит оригиналы к email
+    input.accept = 'image/*';
+    input.multiple = true;
+    input.className = 'lead-photo-input';
+
+    const previews = document.createElement('div');
+    previews.className = 'lead-photo-previews';
+
+    wrap.appendChild(label);
+    wrap.appendChild(input);
+    wrap.appendChild(previews);
+
+    // Вставляем перед блоком согласия/кнопкой отправки (или в конец формы)
+    const consent = form.querySelector('.consent-label') || form.querySelector('button[type="submit"]');
+    if (consent) form.insertBefore(wrap, consent);
+    else form.appendChild(wrap);
+
+    function renderPreviews() {
+        previews.innerHTML = '';
+        leadPhotoDataUrls.forEach((url, idx) => {
+            const item = document.createElement('div');
+            item.className = 'lead-photo-thumb';
+            const im = document.createElement('img');
+            im.src = url;
+            const rm = document.createElement('button');
+            rm.type = 'button';
+            rm.className = 'lead-photo-remove';
+            rm.setAttribute('aria-label', t('photoRemove'));
+            rm.textContent = '×';
+            rm.addEventListener('click', () => {
+                leadPhotoDataUrls.splice(idx, 1);
+                renderPreviews();
+            });
+            item.appendChild(im);
+            item.appendChild(rm);
+            previews.appendChild(item);
+        });
+    }
+
+    input.addEventListener('change', async () => {
+        const files = Array.from(input.files || []);
+        input.value = ''; // позволяем выбрать те же файлы повторно после удаления
+        for (const file of files) {
+            if (leadPhotoDataUrls.length >= MAX_LEAD_PHOTOS) { alert(t('photoTooMany')); break; }
+            if (!file.type.startsWith('image/')) { alert(t('photoBadType')); continue; }
+            if (file.size > LEAD_PHOTO_MAX_BYTES) { alert(t('photoTooBig')); continue; }
+            try {
+                leadPhotoDataUrls.push(await compressImage(file));
+            } catch (e) {
+                console.error('compressImage error:', e);
+            }
+        }
+        renderPreviews();
+    });
+
+    // Доступно снаружи для очистки после успешной отправки
+    initClientPhotoUpload._reset = () => { leadPhotoDataUrls = []; renderPreviews(); };
+}
+
+// Отправка анкеты мастера в Telegram-бота (лид админу). Fire-and-forget, не влияет на email.
+function sendMasterLeadToBot(formData) {
+    try {
+        const get = (k) => (formData.get(k) || '').toString().trim();
+        const specialty = get('specialty');
+        const experience = get('experience');
+        const payload = {
+            name:      get('name'),
+            phone:     get('phone'),
+            telegram:  get('telegram'),
+            whatsapp:  get('whatsapp'),
+            specialty: experience ? `${specialty} (опыт: ${experience} лет)` : specialty,
+            message:   get('message'),
+            honeypot:  get('_gotcha'),
+            lang:      ['ru', 'en', 'ka'].includes(currentLang) ? currentLang : 'ru'
+        };
+        fetch(BOT_MASTER_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            keepalive: true
+        }).catch(() => {});
+    } catch (e) {
+        console.error('sendMasterLeadToBot error:', e);
+    }
+}
+
+// Добавляет в модалку благодарности мастеру кнопку «Завершить регистрацию в Telegram» (один раз).
+function ensureMasterTelegramButton() {
+    const modal = document.getElementById('masterThankYouModal');
+    if (!modal) return;
+    const content = modal.querySelector('.thank-you-content');
+    if (!content || content.querySelector('.master-tg-finish-btn')) return;
+    const link = document.createElement('a');
+    link.className = 'master-tg-finish-btn';
+    link.href = MASTER_BOT_DEEPLINK;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.textContent = t('masterFinishTelegram');
+    // Вставляем перед кнопкой «Отлично!», если она есть
+    const okBtn = content.querySelector('.thank-you-btn');
+    if (okBtn) content.insertBefore(link, okBtn);
+    else content.appendChild(link);
 }
 
 // ============================================
@@ -697,6 +885,7 @@ function initClientLeadFormTracking() {
             closeClientLeadForm();
             openThankYou();
             leadForm.reset();
+            if (initClientPhotoUpload._reset) initClientPhotoUpload._reset(); // чистим превью фото
 
         } catch (error) {
             console.error(error);
@@ -756,6 +945,9 @@ function initMasterLeadFormTracking() {
 
     let isSubmitting = false;
 
+    // Кнопка-диплинк в модалке благодарности готовится заранее (до открытия модалки)
+    ensureMasterTelegramButton();
+
     masterLeadForm.addEventListener('submit', async function (e) {
         e.preventDefault();
         if (isSubmitting) return;
@@ -764,6 +956,9 @@ function initMasterLeadFormTracking() {
         isSubmitting = true;
 
         const formData = new FormData(masterLeadForm);
+
+        // Дублируем анкету мастера в Telegram-бота (лид админу), не влияет на email
+        sendMasterLeadToBot(formData);
 
         try {
             const response = await fetch('https://formspree.io/f/mykdoebj', {
@@ -775,7 +970,7 @@ function initMasterLeadFormTracking() {
             const data = await response.json();
             if (!response.ok) throw new Error(data.error || 'Submit failed');
 
-            if (typeof gtag === 'function') {          
+            if (typeof gtag === 'function') {
                 gtag('event', 'generate_lead_master', {
                     form_name: 'master_lead_form',
                     form_location: 'Регистрация мастера',
@@ -786,6 +981,7 @@ function initMasterLeadFormTracking() {
             }
 
             closeMasterLeadForm();
+            ensureMasterTelegramButton();
             openMasterThankYou();
             masterLeadForm.reset();
 
