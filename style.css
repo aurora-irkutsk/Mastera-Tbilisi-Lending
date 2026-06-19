@@ -365,9 +365,11 @@ header {
     animation: text-shine 5s ease-in-out infinite;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .audience-link:hover {
     box-shadow: 0 4px 25px rgba(6, 255, 165, 0.5);
     transform: translateY(-1px);
+}
 }
 
 /* ============================================
@@ -541,6 +543,7 @@ header {
     transition: transform 0.4s ease;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .service-card:hover {
     background: rgba(0, 0, 0, 0.5);
     transform: translateY(-8px);
@@ -550,6 +553,7 @@ header {
 
 .service-card:hover::before {
     transform: scaleX(1);
+}
 }
 
 .service-card-icon {
@@ -568,10 +572,12 @@ header {
     animation: icon-pulse 3s ease-in-out infinite;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .service-card:hover .service-card-icon {
     transform: scale(1.1) rotate(-5deg);
     box-shadow: 0 0 50px rgba(253, 185, 19, 0.6), inset 0 0 30px rgba(253, 185, 19, 0.2);
     border-color: rgba(253, 185, 19, 1);
+}
 }
 
 .service-card-icon svg {
@@ -613,9 +619,11 @@ header {
     transition: all 0.3s ease;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .service-card:hover .service-card-link {
     background: var(--construction-yellow);
     color: var(--dark-concrete);
+}
 }
 
 @media (max-width: 768px) {
@@ -680,6 +688,7 @@ header {
     transition: opacity 0.3s ease;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .section-card:nth-child(1):hover {
     background: rgba(0, 0, 0, 0.5);
     transform: translateY(-8px);
@@ -690,6 +699,7 @@ header {
     background: rgba(0, 0, 0, 0.5);
     transform: translateY(-8px);
     box-shadow: 0 20px 40px rgba(253, 185, 19, 0.2);
+}
 }
 
 .section-icon {
@@ -723,12 +733,14 @@ header {
         inset 0 0 20px rgba(253, 185, 19, 0.1);
 }
 
+@media (hover: hover) and (pointer: fine) {
 .icon-clients:hover {
     transform: scale(1.1) rotate(-5deg);
-    box-shadow: 
+    box-shadow:
         0 0 50px rgba(253, 185, 19, 0.6),
         inset 0 0 30px rgba(253, 185, 19, 0.2);
     border-color: rgba(253, 185, 19, 1);
+}
 }
 
 /* Круглая рамка для иконки мастеров (желтая) */
@@ -740,12 +752,14 @@ header {
         inset 0 0 20px rgba(253, 185, 19, 0.1);
 }
 
+@media (hover: hover) and (pointer: fine) {
 .icon-masters:hover {
     transform: scale(1.1) rotate(-5deg);
-    box-shadow: 
+    box-shadow:
         0 0 50px rgba(253, 185, 19, 0.6),
         inset 0 0 30px rgba(253, 185, 19, 0.2);
     border-color: rgba(253, 185, 19, 1);
+}
 }
 
 /* Анимация пульсации */
@@ -861,10 +875,12 @@ header {
     color: var(--white);
 }
 
+@media (hover: hover) and (pointer: fine) {
 .cta-button:hover {
     transform: translateY(-5px) scale(1.03);
     border-color: rgba(255, 255, 255, 0.4);
     background: rgba(0, 0, 0, 0.4);
+}
 }
 
 /* Вариант для клиентов - зеленый */
@@ -876,13 +892,15 @@ header {
         inset 0 1px 0 rgba(6, 255, 165, 0.2);
 }
 
+@media (hover: hover) and (pointer: fine) {
 .cta-clients:hover {
-    box-shadow: 
+    box-shadow:
         0 12px 40px rgba(6, 255, 165, 0.5),
         0 0 60px rgba(6, 255, 165, 0.4),
         inset 0 1px 0 rgba(6, 255, 165, 0.3);
     border-color: var(--safety-green);
     background: rgba(6, 255, 165, 0.15);
+}
 }
 
 /* Вариант для мастеров - желтый */
@@ -894,13 +912,15 @@ header {
         inset 0 1px 0 rgba(253, 185, 19, 0.2);
 }
 
+@media (hover: hover) and (pointer: fine) {
 .cta-masters:hover {
-    box-shadow: 
+    box-shadow:
         0 12px 40px rgba(253, 185, 19, 0.5),
         0 0 60px rgba(253, 185, 19, 0.4),
         inset 0 1px 0 rgba(253, 185, 19, 0.3);
     border-color: var(--construction-yellow);
     background: rgba(253, 185, 19, 0.15);
+}
 }
 
 /* Вариант для footer - оранжевый */
@@ -912,13 +932,15 @@ header {
         inset 0 1px 0 rgba(255, 107, 53, 0.2);
 }
 
+@media (hover: hover) and (pointer: fine) {
 .cta-footer:hover {
-    box-shadow: 
+    box-shadow:
         0 12px 40px rgba(255, 107, 53, 0.5),
         0 0 60px rgba(255, 107, 53, 0.4),
         inset 0 1px 0 rgba(255, 107, 53, 0.3);
     border-color: var(--construction-orange);
     background: rgba(255, 107, 53, 0.15);
+}
 }
 
 .cta-button span {
@@ -1013,6 +1035,7 @@ header {
     transition: transform 0.4s ease;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .step-card:hover {
     background: rgba(0, 0, 0, 0.5);
     transform: translateY(-10px);
@@ -1021,6 +1044,7 @@ header {
 
 .step-card:hover::before {
     transform: scaleX(1);
+}
 }
 
 .step-number {
@@ -1047,10 +1071,12 @@ header {
     animation: icon-pulse 3s ease-in-out infinite;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .step-card:hover .step-icon {
     transform: scale(1.1) rotate(-5deg);
     box-shadow: 0 0 50px rgba(253, 185, 19, 0.6), inset 0 0 30px rgba(253, 185, 19, 0.2);
     border-color: rgba(253, 185, 19, 1);
+}
 }
 
 .step-icon svg {
@@ -1165,6 +1191,7 @@ header {
     line-height: 1;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .testimonial-card:hover {
     background: rgba(0, 0, 0, 0.5);
     transform: translateY(-5px);
@@ -1174,6 +1201,7 @@ header {
 /* Hover для секции мастеров — желтая тень */
 .testimonials-masters .testimonial-card:hover {
     box-shadow: 0 15px 40px rgba(253, 185, 19, 0.2);
+}
 }
 
 .testimonial-header {
@@ -1265,9 +1293,11 @@ header {
     height: 80px;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .stat-badge:hover {
     background: rgba(253, 185, 19, 0.15);
     border-color: var(--construction-yellow);
+}
 }
 
 .stat-value {
@@ -1324,9 +1354,11 @@ header {
 .faq-item:nth-child(6) { animation-delay: 0.35s; }
 .faq-item:nth-child(7) { animation-delay: 0.4s; }
 
+@media (hover: hover) and (pointer: fine) {
 .faq-item:hover {
     background: rgba(0, 0, 0, 0.5);
     border-color: var(--construction-yellow);
+}
 }
 
 .faq-item.active {
@@ -1348,8 +1380,10 @@ header {
     transition: all 0.3s ease;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .faq-question:hover {
     background: rgba(253, 185, 19, 0.05);
+}
 }
 
 .faq-icon {
@@ -2814,7 +2848,22 @@ footer {
     transition: background 0.3s ease, transform 0.2s ease;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .master-tg-finish-btn:hover {
     background: #1b86ba;
     transform: translateY(-2px);
+}
+}
+
+/* ============================================
+   ТАЧ-УСТРОЙСТВА (мобильные / планшеты):
+   убираем серую/синюю подсветку при тапе по
+   карточкам, кнопкам и ссылкам — переход
+   срабатывает сразу, без выделения.
+   На десктопе (мышь) ничего не меняется.
+   ============================================ */
+@media (hover: none), (pointer: coarse) {
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
 }
