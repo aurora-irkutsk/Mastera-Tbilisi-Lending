@@ -240,6 +240,21 @@
         data-ka="ხელოსანი"
         data-en="Handyman"
       >Мастер на час</a>
+      <a href="/sborka-mebeli-tbilisi/"
+        data-ru="Сборка мебели"
+        data-ka="ავეჯის აწყობა"
+        data-en="Furniture Assembly"
+      >Сборка мебели</a>
+      <a href="/bytovoy-remont-tbilisi/"
+        data-ru="Бытовой ремонт"
+        data-ka="საყოფაცხოვრებო რემონტი"
+        data-en="Home Repairs"
+      >Бытовой ремонт</a>
+      <a href="/naveska-montazh-tbilisi/"
+        data-ru="Навеска и монтаж"
+        data-ka="დაკიდება და მონტაჟი"
+        data-en="Mounting & Installation"
+      >Навеска и монтаж</a>
     </div>
 
     <div class="lang-switcher">
@@ -259,10 +274,16 @@
           plumber: 'Сантехник',
           electrician: 'Электрик',
           handyman: 'Мастер на час',
+          assembly: 'Сборка мебели',
+          repairs: 'Бытовой ремонт',
+          mounting: 'Навеска и монтаж',
           homeHref: '/ru/',
           plumberHref: '/santehnik-tbilisi/',
           electricianHref: '/elektrik-tbilisi/',
-          handymanHref: '/master-na-chas-tbilisi/'
+          handymanHref: '/master-na-chas-tbilisi/',
+          assemblyHref: '/sborka-mebeli-tbilisi/',
+          repairsHref: '/bytovoy-remont-tbilisi/',
+          mountingHref: '/naveska-montazh-tbilisi/'
         },
         ka: {
           title: 'გვერდი ვერ მოიძებნა',
@@ -271,10 +292,16 @@
           plumber: 'სანტექნიკოსი',
           electrician: 'ელექტრიკოსი',
           handyman: 'ხელოსანი',
+          assembly: 'ავეჯის აწყობა',
+          repairs: 'საყოფაცხოვრებო რემონტი',
+          mounting: 'დაკიდება და მონტაჟი',
           homeHref: '/ge/',
           plumberHref: '/santehnik-tbilisi-ge/',
           electricianHref: '/elektrik-tbilisi-ge/',
-          handymanHref: '/master-na-chas-tbilisi-ge/'
+          handymanHref: '/master-na-chas-tbilisi-ge/',
+          assemblyHref: '/sborka-mebeli-tbilisi-ge/',
+          repairsHref: '/bytovoy-remont-tbilisi-ge/',
+          mountingHref: '/naveska-montazh-tbilisi-ge/'
         },
         en: {
           title: 'Page not found',
@@ -283,10 +310,16 @@
           plumber: 'Plumber',
           electrician: 'Electrician',
           handyman: 'Handyman',
+          assembly: 'Furniture Assembly',
+          repairs: 'Home Repairs',
+          mounting: 'Mounting & Installation',
           homeHref: '/en/',
           plumberHref: '/santehnik-tbilisi-en/',
           electricianHref: '/elektrik-tbilisi-en/',
-          handymanHref: '/master-na-chas-tbilisi-en/'
+          handymanHref: '/master-na-chas-tbilisi-en/',
+          assemblyHref: '/sborka-mebeli-tbilisi-en/',
+          repairsHref: '/bytovoy-remont-tbilisi-en/',
+          mountingHref: '/naveska-montazh-tbilisi-en/'
         }
       };
 
@@ -310,6 +343,12 @@
         links[2].href = t.electricianHref;
         links[3].textContent = t.handyman;
         links[3].href = t.handymanHref;
+        links[4].textContent = t.assembly;
+        links[4].href = t.assemblyHref;
+        links[5].textContent = t.repairs;
+        links[5].href = t.repairsHref;
+        links[6].textContent = t.mounting;
+        links[6].href = t.mountingHref;
 
         document.querySelectorAll('.lang-switcher button').forEach(function(btn) {
           btn.classList.toggle('active', btn.dataset.lang === l);

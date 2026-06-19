@@ -142,6 +142,102 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Сборка мебели в Тбилиси — все языки -->
+  <url>
+    <loc>https://mastera-tbilisi.ge/sborka-mebeli-tbilisi/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mastera-tbilisi.ge/sborka-mebeli-tbilisi/"/>
+    <xhtml:link rel="alternate" hreflang="ka" href="https://mastera-tbilisi.ge/sborka-mebeli-tbilisi-ge/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mastera-tbilisi.ge/sborka-mebeli-tbilisi-en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mastera-tbilisi.ge/sborka-mebeli-tbilisi-en/"/>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mastera-tbilisi.ge/sborka-mebeli-tbilisi-ge/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mastera-tbilisi.ge/sborka-mebeli-tbilisi/"/>
+    <xhtml:link rel="alternate" hreflang="ka" href="https://mastera-tbilisi.ge/sborka-mebeli-tbilisi-ge/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mastera-tbilisi.ge/sborka-mebeli-tbilisi-en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mastera-tbilisi.ge/sborka-mebeli-tbilisi-en/"/>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mastera-tbilisi.ge/sborka-mebeli-tbilisi-en/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mastera-tbilisi.ge/sborka-mebeli-tbilisi/"/>
+    <xhtml:link rel="alternate" hreflang="ka" href="https://mastera-tbilisi.ge/sborka-mebeli-tbilisi-ge/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mastera-tbilisi.ge/sborka-mebeli-tbilisi-en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mastera-tbilisi.ge/sborka-mebeli-tbilisi-en/"/>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Бытовой ремонт в Тбилиси — все языки -->
+  <url>
+    <loc>https://mastera-tbilisi.ge/bytovoy-remont-tbilisi/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mastera-tbilisi.ge/bytovoy-remont-tbilisi/"/>
+    <xhtml:link rel="alternate" hreflang="ka" href="https://mastera-tbilisi.ge/bytovoy-remont-tbilisi-ge/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mastera-tbilisi.ge/bytovoy-remont-tbilisi-en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mastera-tbilisi.ge/bytovoy-remont-tbilisi-en/"/>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mastera-tbilisi.ge/bytovoy-remont-tbilisi-ge/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mastera-tbilisi.ge/bytovoy-remont-tbilisi/"/>
+    <xhtml:link rel="alternate" hreflang="ka" href="https://mastera-tbilisi.ge/bytovoy-remont-tbilisi-ge/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mastera-tbilisi.ge/bytovoy-remont-tbilisi-en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mastera-tbilisi.ge/bytovoy-remont-tbilisi-en/"/>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mastera-tbilisi.ge/bytovoy-remont-tbilisi-en/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mastera-tbilisi.ge/bytovoy-remont-tbilisi/"/>
+    <xhtml:link rel="alternate" hreflang="ka" href="https://mastera-tbilisi.ge/bytovoy-remont-tbilisi-ge/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mastera-tbilisi.ge/bytovoy-remont-tbilisi-en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mastera-tbilisi.ge/bytovoy-remont-tbilisi-en/"/>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Навеска и монтаж в Тбилиси — все языки -->
+  <url>
+    <loc>https://mastera-tbilisi.ge/naveska-montazh-tbilisi/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mastera-tbilisi.ge/naveska-montazh-tbilisi/"/>
+    <xhtml:link rel="alternate" hreflang="ka" href="https://mastera-tbilisi.ge/naveska-montazh-tbilisi-ge/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mastera-tbilisi.ge/naveska-montazh-tbilisi-en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mastera-tbilisi.ge/naveska-montazh-tbilisi-en/"/>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mastera-tbilisi.ge/naveska-montazh-tbilisi-ge/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mastera-tbilisi.ge/naveska-montazh-tbilisi/"/>
+    <xhtml:link rel="alternate" hreflang="ka" href="https://mastera-tbilisi.ge/naveska-montazh-tbilisi-ge/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mastera-tbilisi.ge/naveska-montazh-tbilisi-en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mastera-tbilisi.ge/naveska-montazh-tbilisi-en/"/>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mastera-tbilisi.ge/naveska-montazh-tbilisi-en/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mastera-tbilisi.ge/naveska-montazh-tbilisi/"/>
+    <xhtml:link rel="alternate" hreflang="ka" href="https://mastera-tbilisi.ge/naveska-montazh-tbilisi-ge/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mastera-tbilisi.ge/naveska-montazh-tbilisi-en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mastera-tbilisi.ge/naveska-montazh-tbilisi-en/"/>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- Страница для мастеров — все языки -->
   <url>
     <loc>https://mastera-tbilisi.ge/ru/masters/</loc>
