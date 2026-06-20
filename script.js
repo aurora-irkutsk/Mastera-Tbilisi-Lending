@@ -21,6 +21,7 @@ const i18n = {
         photoTooBig:         'Файл слишком большой (до 10 МБ)',
         photoRemove:         'Удалить',
         masterFinishTelegram:'✅ Завершить регистрацию в Telegram',
+        urgentLabel:         '🚨 Срочный заказ',
     },
     ka: {
         phoneInvalid:        'გთხოვთ, შეიყვანოთ სწორი ქართული ტელეფონის ნომერი ფორმატში: +995XXXXXXXXX (9 ციფრი +995-ის შემდეგ)',
@@ -35,6 +36,7 @@ const i18n = {
         photoTooBig:         'ფაილი ძალიან დიდია (10 მბ-მდე)',
         photoRemove:         'წაშლა',
         masterFinishTelegram:'✅ რეგისტრაციის დასრულება Telegram-ში',
+        urgentLabel:         '🚨 სასწრაფო შეკვეთა',
     },
     en: {
         phoneInvalid:        'Please enter a valid Georgian phone number in the format: +995XXXXXXXXX (9 digits after +995)',
@@ -49,6 +51,7 @@ const i18n = {
         photoTooBig:         'File is too large (up to 10 MB)',
         photoRemove:         'Remove',
         masterFinishTelegram:'✅ Finish registration in Telegram',
+        urgentLabel:         '🚨 Urgent order',
     }
 };
 
@@ -82,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initClientLeadFormTracking();
     initClientPhotoUpload();
     initClientDistrictOptions();
+    initClientUrgentOption();
     initMasterLeadFormTracking();
     initWhatsAppButtonTracking();
     initFAQ();
@@ -547,6 +551,9 @@ function sendLeadToBot(formData) {
             contact:     contactParts.join('\n') || 'Нет контакта', // скрыто до оплаты
             honeypot:    get('_gotcha'),                    // антиспам: люди это поле не заполняют
             lang:        ['ru', 'en', 'ka'].includes(currentLang) ? currentLang : 'ru',
+            // Срочность: галочка без name (в Formspree не уходит) — читаем состояние из DOM.
+            // false по умолчанию; бот помечает «🚨 СРОЧНО» только срочные заявки.
+            urgent:      !!(document.getElementById('leadUrgent') && document.getElementById('leadUrgent').checked),
             photos:      leadPhotoDataUrls.slice(0, MAX_LEAD_PHOTOS) // сжатые фото (base64), до 3
         };
 
@@ -760,6 +767,43 @@ function initClientDistrictOptions() {
         if (other) districtSel.insertBefore(opt, other);
         else districtSel.appendChild(opt);
     });
+}
+
+// Инжектит галочку «Срочный заказ» в клиентскую форму на всех страницах —
+// через JS, без правки HTML каждой страницы (как фото/районы выше).
+// Галочка необязательная и по умолчанию снята. У неё НЕТ name — она не уходит
+// в Formspree; состояние читается в sendLeadToBot и шлётся боту полем urgent.
+function initClientUrgentOption() {
+    const form = document.getElementById('clientLeadForm');
+    if (!form) return;
+    if (form.querySelector('.lead-urgent-label')) return; // уже добавлено
+
+    // Точка вставки ищется ДО создания нашей метки, иначе querySelector('.consent-label')
+    // зацепил бы её саму (у неё тот же класс consent-label для одинакового вида).
+    const consent = form.querySelector('.consent-label') || form.querySelector('button[type="submit"]');
+
+    const label = document.createElement('label');
+    // Тот же класс, что у строки согласия → идентичный стиль (в т.ч. компактный чекбокс,
+    // иначе общий стиль формы растягивает input на всю ширину). Своя метка — для guard.
+    label.className = 'consent-label lead-urgent-label';
+
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.id = 'leadUrgent';   // без name — в Formspree не уходит, читаем в sendLeadToBot
+
+    const span = document.createElement('span');
+    // data-атрибуты → строка переводится автоматически при смене языка (см. setLanguage)
+    span.setAttribute('data-ru', i18n.ru.urgentLabel);
+    span.setAttribute('data-ka', i18n.ka.urgentLabel);
+    span.setAttribute('data-en', i18n.en.urgentLabel);
+    span.textContent = t('urgentLabel');
+
+    label.appendChild(input);
+    label.appendChild(span);
+
+    // Вставляем прямо над строкой согласия (или перед кнопкой отправки, если согласия нет)
+    if (consent) form.insertBefore(label, consent);
+    else form.appendChild(label);
 }
 
 function initClientLeadFormTracking() {

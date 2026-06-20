@@ -2342,6 +2342,20 @@ footer {
     accent-color: var(--construction-yellow);
 }
 
+/* Чекбоксы согласия и «Срочно»: гасим наследие .contact-form input (рамка/фон/
+   свечение/переходы и эффекты :focus/:valid), иначе при клике они «прыгают»
+   и подсвечиваются. */
+.consent-label input[type="checkbox"],
+.consent-label input[type="checkbox"]:focus,
+.consent-label input[type="checkbox"]:valid {
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+    transition: none;
+    outline: none;
+}
+
 .consent-text {
     font-family: 'Montserrat', sans-serif;
     font-size: 0.9rem;
