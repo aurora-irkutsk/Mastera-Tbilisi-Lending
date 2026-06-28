@@ -600,5 +600,77 @@
     <img src="../image/whatsapp-icon.png" alt="WhatsApp" loading="lazy">
   </a>
 
+  <!-- ═══════════════════════════════════════════════════════════════════
+       PWA: установка приложения + регистрация Service Worker.
+       Размещено на языковой странице (а не на корневом index.html, который
+       мгновенно редиректит на /ru/ и не успевает ничего показать).
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="pwa-banner" style="
+    display:none; position:fixed; bottom:0; left:0; right:0; z-index:9999;
+    background:#1a1a1a; border-top:2px solid #FDB913; padding:14px 16px;
+    font-family:sans-serif; color:#fff; box-shadow:0 -4px 20px rgba(0,0,0,0.5);">
+    <style>
+      #pwa-banner-close { position:absolute; top:10px; right:14px; background:none; border:none; color:#aaa; font-size:22px; cursor:pointer; line-height:1; padding:0; }
+      #pwa-banner-close:hover { color:#fff; }
+      #pwa-install-btn { display:inline-block; margin-top:10px; padding:9px 20px; background:#FDB913; color:#1a1a1a; border:none; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer; }
+      #pwa-banner-text { font-size:13px; line-height:1.5; color:#ccc; margin-top:4px; }
+    </style>
+    <button id="pwa-banner-close" aria-label="Закрыть">&times;</button>
+    <span style="font-size:28px; margin-right:10px; vertical-align:middle;">📲</span>
+    <strong id="pwa-banner-title" style="font-size:15px;">Установить приложение</strong>
+    <div id="pwa-banner-text"></div>
+    <div id="pwa-android-wrap" style="display:none;"><button id="pwa-install-btn">Установить</button></div>
+  </div>
+
+  <script>
+  (function () {
+    var T = {
+      ios: 'Нажмите <strong>Поделиться</strong> → <strong>На экран «Домой»</strong>, чтобы установить приложение.',
+      android: 'Добавьте приложение на главный экран для быстрого доступа.'
+    };
+    var isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator.standalone === true);
+    if (isStandalone) return;
+
+    var banner = document.getElementById('pwa-banner');
+    var textEl = document.getElementById('pwa-banner-text');
+    var closeBtn = document.getElementById('pwa-banner-close');
+    var androidW = document.getElementById('pwa-android-wrap');
+    var installBtn = document.getElementById('pwa-install-btn');
+
+    closeBtn.addEventListener('click', function () {
+      localStorage.setItem('pwa_banner_dismissed', '1');
+      banner.style.display = 'none';
+    });
+    if (localStorage.getItem('pwa_banner_dismissed')) return;
+
+    var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (isIOS) {
+      if (localStorage.getItem('pwa_ios_shown')) return;
+      setTimeout(function () { textEl.innerHTML = T.ios; banner.style.display = 'block'; localStorage.setItem('pwa_ios_shown', '1'); }, 3000);
+      return;
+    }
+
+    var deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault(); deferredPrompt = e;
+      textEl.innerHTML = T.android; androidW.style.display = 'block'; banner.style.display = 'block';
+    });
+    installBtn.addEventListener('click', function () {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function (c) {
+        if (c.outcome === 'accepted') { banner.style.display = 'none'; localStorage.setItem('pwa_banner_dismissed', '1'); }
+        deferredPrompt = null;
+      });
+    });
+  })();
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js').catch(function (err) { console.warn('SW registration failed:', err); });
+    });
+  }
+  </script>
+
 </body>
 </html>

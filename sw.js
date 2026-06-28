@@ -1,7 +1,7 @@
 // Service Worker для лендинга Мастера Тбилиси
 // Базовое кэширование: оболочка страниц, манифест, стили, шрифты
 
-const CACHE_NAME = 'mastera-landing-v1';
+const CACHE_NAME = 'mastera-landing-v2';
 
 const PRECACHE_URLS = [
   '/',
