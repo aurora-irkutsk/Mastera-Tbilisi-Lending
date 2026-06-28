@@ -58,6 +58,12 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#FDB913">
 
+  <!-- Apple PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Мастера Тбилиси">
+  <link rel="apple-touch-icon" href="image/web-app-manifest-192x192.png">
+
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7SLML317LT"></script>
   <script>
@@ -91,5 +97,143 @@
       <a href="/en/">ENG</a>
     </div>
   </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       PWA Install Banner — адаптивная плашка установки (3 языка)
+       iOS: подсказка через 3 сек. Android: перехват beforeinstallprompt
+       В режиме standalone автоматически скрывается.
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="pwa-banner" style="
+    display:none; position:fixed; bottom:0; left:0; right:0; z-index:9999;
+    background:#1a1a1a; border-top:2px solid #FDB913; padding:14px 16px;
+    font-family:sans-serif; color:#fff; box-shadow:0 -4px 20px rgba(0,0,0,0.5);
+    animation: slideUp 0.3s ease;
+  ">
+    <style>
+      @keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+      #pwa-banner-close {
+        position:absolute; top:10px; right:14px; background:none; border:none;
+        color:#aaa; font-size:22px; cursor:pointer; line-height:1; padding:0;
+      }
+      #pwa-banner-close:hover { color:#fff; }
+      #pwa-install-btn {
+        display:inline-block; margin-top:10px; padding:9px 20px;
+        background:#FDB913; color:#1a1a1a; border:none; border-radius:8px;
+        font-size:14px; font-weight:700; cursor:pointer;
+      }
+      #pwa-install-btn:hover { background:#e6a800; }
+      #pwa-banner-icon { font-size:28px; margin-right:10px; vertical-align:middle; }
+      #pwa-banner-text { font-size:13px; line-height:1.5; color:#ccc; margin-top:4px; }
+    </style>
+    <button id="pwa-banner-close" aria-label="Закрыть">&times;</button>
+    <span id="pwa-banner-icon">📲</span>
+    <strong id="pwa-banner-title" style="font-size:15px;"></strong>
+    <div id="pwa-banner-text"></div>
+    <div id="pwa-android-wrap" style="display:none;">
+      <button id="pwa-install-btn"></button>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    // ── Определение языка ─────────────────────────────────────────────
+    var lang = (navigator.language || 'ru').substring(0, 2);
+    if (!['ka', 'en', 'ru'].includes(lang)) lang = 'ru';
+
+    var i18n = {
+      ru: {
+        title: 'Установить приложение',
+        ios: 'Нажмите <strong>Поделиться</strong> → <strong>На экран «Домой»</strong>, чтобы добавить приложение.',
+        android: 'Добавьте приложение на главный экран для быстрого доступа.',
+        btn: 'Установить'
+      },
+      en: {
+        title: 'Install App',
+        ios: 'Tap <strong>Share</strong> → <strong>Add to Home Screen</strong> to install the app.',
+        android: 'Add the app to your home screen for quick access.',
+        btn: 'Install'
+      },
+      ka: {
+        title: 'აპლიკაციის დაყენება',
+        ios: 'დააჭირეთ <strong>გაზიარება</strong> → <strong>მთავარ ეკრანზე დამატება</strong>.',
+        android: 'დაამატეთ აპლიკაცია მთავარ ეკრანზე სწრაფი წვდომისთვის.',
+        btn: 'დაყენება'
+      }
+    };
+
+    var t = i18n[lang] || i18n.ru;
+
+    // Если уже в standalone — баннер не нужен
+    var isStandalone = window.matchMedia('(display-mode: standalone)').matches
+      || (window.navigator.standalone === true);
+    if (isStandalone) return;
+
+    var banner = document.getElementById('pwa-banner');
+    var titleEl = document.getElementById('pwa-banner-title');
+    var textEl  = document.getElementById('pwa-banner-text');
+    var closeBtn = document.getElementById('pwa-banner-close');
+    var androidWrap = document.getElementById('pwa-android-wrap');
+    var installBtn = document.getElementById('pwa-install-btn');
+
+    titleEl.textContent = t.title;
+    installBtn.textContent = t.btn;
+
+    function hideBanner() {
+      banner.style.display = 'none';
+    }
+
+    closeBtn.addEventListener('click', function () {
+      localStorage.setItem('pwa_banner_dismissed', '1');
+      hideBanner();
+    });
+
+    if (localStorage.getItem('pwa_banner_dismissed')) return;
+
+    // ── iOS ───────────────────────────────────────────────────────────
+    var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent)
+             || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (isIOS) {
+      if (localStorage.getItem('pwa_ios_shown')) return;
+      setTimeout(function () {
+        textEl.innerHTML = t.ios;
+        banner.style.display = 'block';
+        localStorage.setItem('pwa_ios_shown', '1');
+      }, 3000);
+      return;
+    }
+
+    // ── Android / Desktop ─────────────────────────────────────────────
+    var deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      textEl.innerHTML = t.android;
+      androidWrap.style.display = 'block';
+      banner.style.display = 'block';
+    });
+
+    installBtn.addEventListener('click', function () {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function (choice) {
+        if (choice.outcome === 'accepted') {
+          hideBanner();
+          localStorage.setItem('pwa_banner_dismissed', '1');
+        }
+        deferredPrompt = null;
+      });
+    });
+  })();
+  </script>
+
+  <!-- ── Регистрация Service Worker ───────────────────────────────────── -->
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js')
+        .catch(function (err) { console.warn('SW registration failed:', err); });
+    });
+  }
+  </script>
 </body>
 </html>
